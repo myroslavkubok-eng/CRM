@@ -1,0 +1,16 @@
+# Katia Beauty Platform - Robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /superadmin/
+Disallow: /owner/
+Disallow: /master/
+Disallow: /test/
+
+# Sitemap
+Sitemap: https://katia.beauty/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1

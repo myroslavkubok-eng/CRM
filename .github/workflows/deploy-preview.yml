@@ -1,0 +1,56 @@
+name: Deploy Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  preview:
+    name: 🔍 Preview Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📥 Install dependencies
+        run: |
+          npm install --legacy-peer-deps
+          chmod +x node_modules/.bin/*
+
+      - name: 🏗️ Build preview
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: 💬 Comment preview info
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const message = `## 🔍 Preview Build
+            
+            ✅ Build completed successfully!
+            
+            ### 📊 Build Stats:
+            - **Build time**: ~${process.env.BUILD_TIME || 'N/A'}
+            - **Bundle size**: Check artifacts
+            
+            ### 🎯 Next Steps:
+            1. Review code changes
+            2. Run tests locally: \`npm test\`
+            3. Check auth flow: Login/Signup/Logout
+            
+            _Preview generated for commit: ${context.sha.substring(0, 7)}_`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });

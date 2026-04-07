@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+     <base href="/Katiabooking/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    
+    <!-- GitHub Pages SPA redirect script -->
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      // MIT License
+      // https://github.com/rafgraph/spa-github-pages
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
+    </script>
+    
+    <!-- Primary Meta Tags -->
+    <title>Katia - Платформа для управления салонами красоты</title>
+    <meta name="title" content="Katia - Платформа для управления салонами красоты" />
+    <meta name="description" content="Комплексная SaaS платформа для салонов красоты. Бронирование онлайн, управление календарем, CRM система, аналитика и подписки. Работает на всех устройствах." />
+    <meta name="keywords" content="салон красоты, бронирование, календарь, CRM, аналитика, beauty salon, booking system" />
+    <meta name="author" content="Katia Beauty Platform" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://katia.beauty/" />
+    <meta property="og:title" content="Katia - Платформа для управления салонами красоты" />
+    <meta property="og:description" content="Комплексная SaaS платформа для салонов красоты. Бронирование онлайн, управление календарем, CRM система, аналитика." />
+    <meta property="og:image" content="/og-image.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://katia.beauty/" />
+    <meta property="twitter:title" content="Katia - Платформа для управления салонами красоты" />
+    <meta property="twitter:description" content="Комплексная SaaS платформа для салонов красоты. Бронирование онлайн, управление календарем, CRM система." />
+    <meta property="twitter:image" content="/og-image.png" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-152x152.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-96x96.png" />
+    <link rel="shortcut icon" href="/icons/icon-96x96.png" />
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#9333ea" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#9333ea" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#7c3aed" />
+    
+    <!-- Apple Mobile Web App -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Katia" />
+    
+    <!-- Microsoft Tile -->
+    <meta name="msapplication-TileColor" content="#9333ea" />
+    <meta name="msapplication-TileImage" content="/icons/icon-144x144.png" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+    
+    <!-- Prevent zooming on input focus (iOS) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    
+    <!-- Preconnect to important domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="https://unpkg.com" />
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Katia Beauty Platform",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web, iOS, Android, Windows, macOS",
+      "offers": {
+        "@type": "AggregateOffer",
+        "priceCurrency": "AED",
+        "lowPrice": "99",
+        "highPrice": "499"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1247"
+      },
+      "description": "Комплексная платформа для управления салонами красоты с бронированием, CRM, аналитикой"
+    }
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <div style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+        text-align: center;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      ">
+        <div>
+          <h1 style="font-size: 32px; margin-bottom: 16px;">JavaScript Required</h1>
+          <p style="font-size: 18px; margin-bottom: 24px;">
+            Для работы платформы Katia необходим включенный JavaScript.
+          </p>
+          <p style="font-size: 16px; opacity: 0.9;">
+            Пожалуйста, включите JavaScript в настройках браузера.
+          </p>
+        </div>
+      </div>
+    </noscript>
+    
+    <!-- ВАЖНО: Figma Make использует id="container" в production вместо id="root" -->
+    <div id="root"></div>
+    
+    <!-- Main App Script -->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

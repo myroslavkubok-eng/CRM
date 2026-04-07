@@ -1,0 +1,69 @@
+@import './fonts.css';
+@import './tailwind.css';
+@import './theme.css';
+
+/* PWA and Mobile Safe Area Support */
+:root {
+  /* Safe area insets for notched devices (iPhone X+) */
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-inset-left: env(safe-area-inset-left, 0px);
+  --safe-area-inset-right: env(safe-area-inset-right, 0px);
+}
+
+/* Mobile viewport height fix */
+@supports (-webkit-touch-callout: none) {
+  .min-h-screen {
+    min-height: -webkit-fill-available;
+  }
+}
+
+/* Safe area utilities */
+.safe-area-inset-top {
+  padding-top: var(--safe-area-inset-top);
+}
+
+.safe-area-inset-bottom {
+  padding-bottom: var(--safe-area-inset-bottom);
+}
+
+.safe-area-inset-left {
+  padding-left: var(--safe-area-inset-left);
+}
+
+.safe-area-inset-right {
+  padding-right: var(--safe-area-inset-right);
+}
+
+/* Slick Carousel Custom Styles */
+.slick-slider {
+  position: relative;
+}
+
+.slick-list {
+  overflow: hidden;
+}
+
+.slick-track {
+  display: flex !important;
+  gap: 0.5rem;
+}
+
+.slick-slide {
+  height: inherit !important;
+}
+
+.slick-slide > div {
+  height: 100%;
+}
+
+/* Hide default arrows */
+.slick-prev,
+.slick-next {
+  z-index: 10;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  display: none;
+}

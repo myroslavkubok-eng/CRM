@@ -1,0 +1,66 @@
+name: PR Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  quality:
+    name: 🎯 Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📥 Install dependencies
+        run: |
+          npm install --legacy-peer-deps
+          chmod +x node_modules/.bin/*
+
+      - name: 🔍 ESLint check
+        run: npm run lint
+        continue-on-error: true
+
+      - name: 💅 Prettier check
+        run: npm run format:check
+        continue-on-error: true
+
+      - name: 🧪 Run tests
+        run: npm run test:coverage
+
+      - name: 📊 Comment PR with coverage
+        uses: romeovs/lcov-reporter-action@v0.3.1
+        with:
+          lcov-file: ./coverage/lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          delete-old-comments: true
+
+  auth-tests:
+    name: 🔐 Auth Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📥 Install dependencies
+        run: |
+          npm install --legacy-peer-deps
+          chmod +x node_modules/.bin/*
+
+      - name: 🧪 Run auth tests only
+        run: npx vitest run src/test/contexts/AuthContext.test.tsx
+
+      - name: ✅ Auth tests passed
+        run: echo "✅ All authentication tests passed!"

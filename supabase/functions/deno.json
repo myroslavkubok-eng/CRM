@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "lib": ["deno.window"],
+    "strict": true
+  },
+  "imports": {
+    "hono": "npm:hono@^3.11.7",
+    "@supabase/supabase-js": "npm:@supabase/supabase-js@2"
+  },
+  "fmt": {
+    "files": {
+      "include": ["server/**/*.ts", "server/**/*.tsx"]
+    }
+  },
+  "lint": {
+    "files": {
+      "include": ["server/**/*.ts", "server/**/*.tsx"]
+    }
+  }
+}
+

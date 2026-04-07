@@ -1,0 +1,14 @@
+/* Import Inter font for modern SaaS look */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+/* Import Leaflet CSS for maps */
+@import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
+/* Custom Leaflet styles */
+@import './leaflet-custom.css';
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

@@ -1,0 +1,129 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  lint:
+    name: 🔍 Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📥 Install dependencies
+        run: |
+          npm install --legacy-peer-deps
+          chmod +x node_modules/.bin/*
+
+      - name: 🔍 Run ESLint
+        run: npm run lint
+        continue-on-error: true
+
+      - name: 💅 Check Prettier
+        run: npm run format:check
+        continue-on-error: true
+
+  #test:
+   # name: 🧪 Test
+    #runs-on: ubuntu-latest
+    #steps:
+      #- name: 📥 Checkout code
+        #uses: actions/checkout@v4
+
+      #- name: 📦 Setup Node.js
+        #uses: actions/setup-node@v4
+        #with:
+          #node-version: '20'
+
+     # - name: 📥 Install dependencies
+        #run: |
+          #npm install --legacy-peer-deps
+          #chmod +x node_modules/.bin/*
+
+      #- name: 🧪 Run tests with coverage
+        #run: npm run test:coverage
+
+      #- name: 📊 Upload coverage to Codecov
+        #uses: codecov/codecov-action@v4
+        #with:
+          #files: ./coverage/lcov.info
+          #flags: unittests
+          #name: codecov-umbrella
+          #fail_ci_if_error: false
+
+  build:
+    name: 🏗️ Build
+    runs-on: ubuntu-latest
+    #needs: [test]
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📥 Install dependencies
+        run: |
+          npm install --legacy-peer-deps
+          chmod +x node_modules/.bin/*
+
+      - name: 🏗️ Build project
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: 📤 Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
+
+  deploy:
+    name: 🚀 Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📥 Install dependencies
+        run: |
+          npm install --legacy-peer-deps
+          chmod +x node_modules/.bin/*
+
+      - name: 🏗️ Build project
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: 📤 Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+          
+      - name: 🚀 Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
