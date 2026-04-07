@@ -1,0 +1,313 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Owner Dashboard";
+    ViewData["Description"] = "Manage your beauty salon - bookings, staff, services, and analytics.";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Katia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-50">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white border-r border-gray-200 flex flex-col hidden md:flex">
+            <div class="p-6 border-b border-gray-200">
+                <a href="/" class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">K</span>
+                    </div>
+                    <span class="font-bold text-lg bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Katia</span>
+                </a>
+                <p class="text-xs text-gray-500 mt-1">Owner Dashboard</p>
+            </div>
+            <nav class="flex-1 p-4 space-y-1">
+                <a href="#" onclick="showPanel('overview')" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    Overview
+                </a>
+                <a href="#" onclick="showPanel('bookings')" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    Bookings
+                </a>
+                <a href="#" onclick="showPanel('staff')" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    Staff / Masters
+                </a>
+                <a href="#" onclick="showPanel('services')" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                    Services
+                </a>
+                <a href="#" onclick="showPanel('clients')" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    Clients
+                </a>
+                <a href="/feed" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z"/></svg>
+                    Beauty Feed
+                </a>
+            </nav>
+            <div class="p-4 border-t border-gray-200">
+                <button onclick="signOut()" class="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                    Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-y-auto">
+            <!-- Top Bar -->
+            <div class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                <div>
+                    <h1 class="text-xl font-bold text-gray-900">Owner Dashboard</h1>
+                    <p id="salon-name-header" class="text-sm text-gray-500">Loading your salon...</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span id="user-name" class="text-sm font-medium text-gray-700"></span>
+                    <div class="w-9 h-9 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
+                        <span id="user-initial" class="text-white font-bold text-sm">?</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6">
+
+                <!-- Overview Panel -->
+                <div id="panel-overview">
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                            <div class="flex items-center justify-between mb-3">
+                                <p class="text-sm text-gray-500">Today's Bookings</p>
+                                <div class="w-9 h-9 bg-purple-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                </div>
+                            </div>
+                            <p id="stat-today" class="text-3xl font-bold text-gray-900">—</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                            <div class="flex items-center justify-between mb-3">
+                                <p class="text-sm text-gray-500">Total Clients</p>
+                                <div class="w-9 h-9 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                </div>
+                            </div>
+                            <p id="stat-clients" class="text-3xl font-bold text-gray-900">—</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                            <div class="flex items-center justify-between mb-3">
+                                <p class="text-sm text-gray-500">Revenue (Month)</p>
+                                <div class="w-9 h-9 bg-green-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                </div>
+                            </div>
+                            <p id="stat-revenue" class="text-3xl font-bold text-gray-900">—</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                            <div class="flex items-center justify-between mb-3">
+                                <p class="text-sm text-gray-500">Rating</p>
+                                <div class="w-9 h-9 bg-yellow-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-yellow-600 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                </div>
+                            </div>
+                            <p id="stat-rating" class="text-3xl font-bold text-gray-900">—</p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Bookings -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-bold text-gray-900">Recent Bookings</h2>
+                            <button onclick="showPanel('bookings')" class="text-sm text-purple-600 hover:underline">View all</button>
+                        </div>
+                        <div id="recent-bookings">
+                            <div class="text-center py-8 text-gray-400 text-sm">Loading bookings...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bookings Panel -->
+                <div id="panel-bookings" class="hidden">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-bold text-gray-900">All Bookings</h2>
+                        <select id="booking-status-filter" onchange="loadBookings()" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            <option value="">All Statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div id="bookings-list" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div class="text-center py-8 text-gray-400 text-sm">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Staff Panel -->
+                <div id="panel-staff" class="hidden">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-bold text-gray-900">Staff / Masters</h2>
+                        <button class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90">+ Add Master</button>
+                    </div>
+                    <div id="staff-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <div class="text-gray-400 text-sm col-span-full text-center py-8">Loading staff...</div>
+                    </div>
+                </div>
+
+                <!-- Services Panel -->
+                <div id="panel-services" class="hidden">
+                    <h2 class="text-xl font-bold text-gray-900 mb-6">Services</h2>
+                    <div id="services-list" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div class="text-center py-8 text-gray-400 text-sm">Loading services...</div>
+                    </div>
+                </div>
+
+                <!-- Clients Panel -->
+                <div id="panel-clients" class="hidden">
+                    <h2 class="text-xl font-bold text-gray-900 mb-6">Clients</h2>
+                    <div id="clients-list" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div class="text-center py-8 text-gray-400 text-sm">Loading clients...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+let salonId = null;
+
+async function init() {
+    const token = localStorage.getItem('auth_token');
+    if (!token) { window.location.href = '/auth'; return; }
+
+    try {
+        const resp = await fetch('/api/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
+        if (!resp.ok) { window.location.href = '/auth'; return; }
+        const user = await resp.json();
+
+        document.getElementById('user-name').textContent = user.fullName || user.email || '';
+        document.getElementById('user-initial').textContent = (user.fullName || user.email || '?')[0].toUpperCase();
+
+        // Get salon
+        const salonResp = await fetch('/api/salons/user/' + user.id, { headers: { 'Authorization': 'Bearer ' + token } });
+        if (salonResp.ok) {
+            const salonData = await salonResp.json();
+            const salon = salonData.salon || salonData;
+            if (salon) {
+                salonId = salon.id;
+                document.getElementById('salon-name-header').textContent = salon.name;
+                document.getElementById('stat-rating').textContent = (salon.rating || 0).toFixed(1);
+                loadDashboardData();
+            }
+        }
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function loadDashboardData() {
+    const token = localStorage.getItem('auth_token') || '';
+    // Load bookings
+    try {
+        const resp = await fetch('/api/bookings?salonId=' + salonId, { headers: { 'Authorization': 'Bearer ' + token } });
+        if (resp.ok) {
+            const data = await resp.json();
+            const bookings = data.bookings || data || [];
+            const today = new Date().toDateString();
+            const todayBookings = bookings.filter(b => new Date(b.startTime).toDateString() === today);
+            document.getElementById('stat-today').textContent = todayBookings.length;
+
+            const recentEl = document.getElementById('recent-bookings');
+            if (!bookings.length) {
+                recentEl.innerHTML = '<p class="text-center py-8 text-gray-400 text-sm">No bookings yet.</p>';
+                return;
+            }
+            recentEl.innerHTML = `
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead><tr class="border-b border-gray-100">
+                            <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Client</th>
+                            <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Service</th>
+                            <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Date</th>
+                            <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Status</th>
+                        </tr></thead>
+                        <tbody>${bookings.slice(0,10).map(b => `
+                            <tr class="border-b border-gray-50 hover:bg-gray-50">
+                                <td class="py-3 px-3 font-medium">${b.clientName || b.customerName || '—'}</td>
+                                <td class="py-3 px-3 text-gray-600">${b.serviceName || '—'}</td>
+                                <td class="py-3 px-3 text-gray-600">${b.startTime ? new Date(b.startTime).toLocaleDateString() : '—'}</td>
+                                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full text-xs font-medium ${statusClass(b.status)}">${b.status || 'pending'}</span></td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>`;
+        }
+    } catch (e) {}
+
+    // Load clients
+    try {
+        const resp = await fetch('/api/clients?salonId=' + salonId, { headers: { 'Authorization': 'Bearer ' + token } });
+        if (resp.ok) {
+            const data = await resp.json();
+            document.getElementById('stat-clients').textContent = (data.clients || data || []).length;
+        }
+    } catch (e) {}
+}
+
+function statusClass(status) {
+    const map = { confirmed: 'bg-green-100 text-green-700', pending: 'bg-yellow-100 text-yellow-700', cancelled: 'bg-red-100 text-red-700', completed: 'bg-blue-100 text-blue-700' };
+    return map[status] || 'bg-gray-100 text-gray-700';
+}
+
+function showPanel(name) {
+    ['overview','bookings','staff','services','clients'].forEach(p => {
+        document.getElementById('panel-' + p).classList.toggle('hidden', p !== name);
+    });
+}
+
+function signOut() {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_data');
+    window.location.href = '/';
+}
+
+async function loadBookings() {
+    const token = localStorage.getItem('auth_token') || '';
+    const status = document.getElementById('booking-status-filter').value;
+    const url = '/api/bookings?salonId=' + salonId + (status ? '&status=' + status : '');
+    try {
+        const resp = await fetch(url, { headers: { 'Authorization': 'Bearer ' + token } });
+        if (resp.ok) {
+            const data = await resp.json();
+            const bookings = data.bookings || data || [];
+            document.getElementById('bookings-list').innerHTML = bookings.length
+                ? `<table class="w-full text-sm"><thead><tr class="bg-gray-50 border-b border-gray-200">
+                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">Client</th>
+                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">Service</th>
+                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">Date & Time</th>
+                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">Status</th>
+                   </tr></thead><tbody>${bookings.map(b => `
+                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                        <td class="px-4 py-3 font-medium">${b.clientName || b.customerName || '—'}</td>
+                        <td class="px-4 py-3 text-gray-600">${b.serviceName || '—'}</td>
+                        <td class="px-4 py-3 text-gray-600">${b.startTime ? new Date(b.startTime).toLocaleString() : '—'}</td>
+                        <td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-medium ${statusClass(b.status)}">${b.status || 'pending'}</span></td>
+                    </tr>`).join('')}</tbody></table>`
+                : '<p class="text-center py-8 text-gray-400 text-sm">No bookings found.</p>';
+        }
+    } catch {}
+}
+
+init();
+</script>
+</body>
+</html>
+
+

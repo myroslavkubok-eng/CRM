@@ -1,0 +1,313 @@
+@{
+    ViewData["Title"] = "Pricing - Katia Beauty Platform";
+    ViewData["Description"] = "Simple, transparent pricing for beauty salons. No hidden fees, no commission on bookings.";
+}
+
+<div class="min-h-screen bg-gradient-to-b from-purple-50 to-white">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100 shadow-sm">
+        <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+            <a href="/" class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Katia</a>
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
+                <a href="/" class="hover:text-gray-900 transition-colors">Home</a>
+                <a href="/salons" class="hover:text-gray-900 transition-colors">Find a Salon</a>
+                <a href="/pricing" class="text-purple-600 font-semibold">Pricing</a>
+                <a href="/contact" class="hover:text-gray-900 transition-colors">Contact</a>
+            </nav>
+            <div class="flex items-center gap-3">
+                <a href="/auth" class="text-sm font-medium text-gray-700 hover:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">Sign In</a>
+                <a href="/become-partner" class="text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-16">
+        <!-- Page Header -->
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-8">Simple, Transparent Pricing</h1>
+            <p class="text-lg text-gray-600 mb-3">Choose the perfect plan for your salon. No commitment, cancel anytime.</p>
+            <p class="text-sm text-gray-500 mb-10">Select a plan that fits your needs.</p>
+
+            <!-- No Hidden Fees Notice -->
+            <div class="max-w-2xl mx-auto mb-10 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl">
+                <div class="flex items-center justify-center gap-2 mb-2">
+                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span class="font-bold text-green-900">100% Transparent Pricing</span>
+                </div>
+                <p class="text-sm text-green-800">You only pay for your subscription plan. <span class="font-semibold">No hidden fees, no commission on bookings, no setup charges.</span> What you see is what you pay!</p>
+            </div>
+
+            <!-- Benefits -->
+            <div class="flex flex-wrap justify-center gap-6 mt-10">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </div>
+                    <span class="text-sm text-gray-700">No Hidden Fees</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    <span class="text-sm text-gray-700">Instant Setup</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <span class="text-sm text-gray-700">Unlimited Clients</span>
+                </div>
+            </div>
+
+            <!-- Billing Toggle -->
+            <div class="mt-12 mb-10 flex justify-center">
+                <div class="inline-flex items-center gap-3 p-2 bg-white rounded-full shadow-lg border border-gray-200">
+                    <button onclick="setBilling('monthly')" id="btn-monthly" class="px-6 py-3 rounded-full text-sm font-semibold transition-all bg-gray-900 text-white shadow-md">Monthly</button>
+                    <button onclick="setBilling('semi-annual')" id="btn-semi-annual" class="relative px-6 py-3 rounded-full text-sm font-semibold transition-all text-gray-700 hover:text-gray-900">
+                        6 Months
+                        <span class="absolute -top-2 -right-2 bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full font-bold">15-20%</span>
+                    </button>
+                    <button onclick="setBilling('annual')" id="btn-annual" class="relative px-6 py-3 rounded-full text-sm font-semibold transition-all text-gray-700 hover:text-gray-900">
+                        Annual
+                        <span class="absolute -top-2 -right-2 bg-green-600 text-white text-xs px-2 py-0.5 rounded-full font-bold">25-30%</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pricing Cards -->
+        <div class="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto mb-20 px-4 md:px-6 mt-4">
+            <!-- Basic Start -->
+            <div class="relative bg-white rounded-2xl border border-gray-200 shadow-lg overflow-visible p-0">
+                <div class="text-center pt-8 pb-6 px-6">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Basic Start</h3>
+                    <p class="text-sm text-gray-600 mb-4">Perfect for independent masters</p>
+                    <button onclick="alert('Demo coming soon!')" class="text-sm text-purple-600 hover:text-purple-700 flex items-center gap-1 justify-center mx-auto">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                        View Live Demo
+                    </button>
+                </div>
+                <div class="px-6 pb-8">
+                    <div class="text-center mb-6">
+                        <div class="flex items-baseline justify-center gap-1">
+                            <span id="price-basic" class="text-3xl md:text-4xl font-bold text-gray-900">AED 99</span>
+                            <span id="period-basic" class="text-sm text-gray-500">/mo</span>
+                        </div>
+                        <div id="savings-basic" class="hidden text-sm font-semibold text-green-600 mt-1"></div>
+                    </div>
+                    <div class="space-y-3 mb-6">
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">INCLUDES</p>
+                        @foreach (var f in new[]{"Up to 2 Masters","Up to 15 Services","Basic Online Booking","Client Database (basic)","Mobile App Access","Push Notifications 24/7","Basic Calendar & Scheduling","Booking Widget for Website"})
+                        {
+                            <div class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                <span class="text-sm text-gray-700">@f</span>
+                            </div>
+                        }
+                        @foreach (var f in new[]{"Admin Role Management","Multiple Salon Locations","AI Receptionist","Marketing Tools (SMS/Email)","Advanced Analytics & Reports","Financial Reports","Priority Support 24/7"})
+                        {
+                            <div class="flex items-start gap-3 opacity-40">
+                                <svg class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                <span class="text-sm text-gray-400 line-through">@f</span>
+                            </div>
+                        }
+                    </div>
+                    <a href="/become-partner" class="block w-full h-12 bg-white hover:bg-gray-50 text-gray-900 border-2 border-gray-200 rounded-lg font-medium text-center leading-[3rem] transition-all">Get Started</a>
+                </div>
+            </div>
+
+            <!-- Standard Growth (Popular) -->
+            <div class="relative bg-white rounded-2xl border-2 border-purple-500 shadow-2xl scale-105 md:scale-110 overflow-visible p-0">
+                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 px-4 py-1.5 rounded-full text-xs font-bold text-white bg-gradient-to-r from-purple-600 to-purple-500 flex items-center gap-1">
+                    👑 MOST POPULAR
+                </div>
+                <div class="text-center pt-8 pb-6 px-6">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Standard Growth</h3>
+                    <p class="text-sm text-gray-600 mb-4">For growing salons</p>
+                    <button onclick="alert('Demo coming soon!')" class="text-sm text-purple-600 hover:text-purple-700 flex items-center gap-1 justify-center mx-auto">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                        View Live Demo
+                    </button>
+                </div>
+                <div class="px-6 pb-8">
+                    <div class="text-center mb-6">
+                        <div class="flex items-baseline justify-center gap-1">
+                            <span id="price-standard" class="text-3xl md:text-4xl font-bold text-gray-900">AED 299</span>
+                            <span id="period-standard" class="text-sm text-gray-500">/mo</span>
+                        </div>
+                        <div id="savings-standard" class="hidden text-sm font-semibold text-green-600 mt-1"></div>
+                    </div>
+                    <div class="space-y-3 mb-6">
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">INCLUDES</p>
+                        @foreach (var f in new[]{"Up to 8 Masters","1 Admin (with booking access)","Up to 50 Services","Advanced Online Booking","Client CRM System","AI Receptionist (Basic)","Marketing Tools (SMS/Email)","Workplace Management System","Basic Analytics Dashboard","Push Notifications 24/7","Mobile App Access","Booking Widget for Website","Custom Branding"})
+                        {
+                            <div class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                <span class="text-sm text-gray-700">@f</span>
+                            </div>
+                        }
+                        @foreach (var f in new[]{"Multiple Salon Locations","Advanced AI Receptionist","Advanced Analytics & Custom Reports","Priority Support 24/7"})
+                        {
+                            <div class="flex items-start gap-3 opacity-40">
+                                <svg class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                <span class="text-sm text-gray-400 line-through">@f</span>
+                            </div>
+                        }
+                    </div>
+                    <a href="/become-partner" class="block w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg font-medium text-center leading-[3rem] transition-all">Get Started</a>
+                </div>
+            </div>
+
+            <!-- Business Pro -->
+            <div class="relative bg-white rounded-2xl border border-gray-200 shadow-lg overflow-visible p-0">
+                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 px-4 py-1.5 rounded-full text-xs font-bold text-white bg-gradient-to-r from-orange-500 to-orange-400">
+                    BEST VALUE
+                </div>
+                <div class="text-center pt-8 pb-6 px-6">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Business Pro</h3>
+                    <p class="text-sm text-gray-600 mb-4">Maximum power for large salons</p>
+                    <button onclick="alert('Demo coming soon!')" class="text-sm text-purple-600 hover:text-purple-700 flex items-center gap-1 justify-center mx-auto">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                        View Live Demo
+                    </button>
+                </div>
+                <div class="px-6 pb-8">
+                    <div class="text-center mb-6">
+                        <div class="flex items-baseline justify-center gap-1">
+                            <span id="price-business" class="text-3xl md:text-4xl font-bold text-gray-900">AED 499</span>
+                            <span id="period-business" class="text-sm text-gray-500">/mo</span>
+                        </div>
+                        <div id="savings-business" class="hidden text-sm font-semibold text-green-600 mt-1"></div>
+                    </div>
+                    <div class="space-y-3 mb-6">
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">INCLUDES</p>
+                        @foreach (var f in new[]{"Unlimited Masters","Unlimited Admins","Unlimited Services","Advanced AI Receptionist","Multiple Salon Locations","Priority Support 24/7","Advanced Analytics & Custom Reports","Financial Reports & Revenue Tracking","Export/Import Client Database","Inventory Management","Marketing Automation","Client CRM System (Advanced)","Push Notifications 24/7","Mobile App Access","Custom Branding","API Access","Dedicated Account Manager"})
+                        {
+                            <div class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                <span class="text-sm text-gray-700">@f</span>
+                            </div>
+                        }
+                    </div>
+                    <a href="/become-partner" class="block w-full h-12 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium text-center leading-[3rem] transition-all">Get Started</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trust Logos -->
+        <div class="text-center mt-20">
+            <p class="text-xs text-gray-400 uppercase tracking-wider mb-4">TRUSTED BY</p>
+            <div class="flex flex-wrap justify-center items-center gap-8">
+                @foreach (var logo in new[]{"VOGUE","ELLE","GLAMOUR","HARPER'S BAZAAR"})
+                {
+                    <div class="text-gray-300 font-serif text-sm tracking-wider">@logo</div>
+                }
+            </div>
+        </div>
+
+        <!-- Bottom Info -->
+        <div class="mt-16 max-w-4xl mx-auto">
+            <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-8 md:p-10">
+                <div class="grid md:grid-cols-3 gap-6 text-center">
+                    <div>
+                        <svg class="w-10 h-10 text-purple-600 mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <h4 class="font-bold text-gray-900 mb-2">Secure &amp; Trusted</h4>
+                        <p class="text-sm text-gray-600">Bank-level security for all your data and payments</p>
+                    </div>
+                    <div>
+                        <svg class="w-10 h-10 text-purple-600 mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        <h4 class="font-bold text-gray-900 mb-2">Free Migration</h4>
+                        <p class="text-sm text-gray-600">We'll help you move from your current system for free</p>
+                    </div>
+                    <div>
+                        <svg class="w-10 h-10 text-purple-600 mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        <h4 class="font-bold text-gray-900 mb-2">24/7 Support</h4>
+                        <p class="text-sm text-gray-600">Our team is always here to help you succeed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="mt-16 max-w-3xl mx-auto">
+            <h2 class="text-2xl font-bold text-center text-gray-900 mb-8">Frequently Asked Questions</h2>
+            <div class="space-y-4">
+                <details class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                    <summary class="font-semibold text-gray-900 cursor-pointer">Can I upgrade or downgrade my plan at any time?</summary>
+                    <p class="mt-4 text-sm text-gray-600">Yes! You can change your plan at any time with instant effect using fair proration billing.</p>
+                </details>
+                <details class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                    <summary class="font-semibold text-gray-900 cursor-pointer">Are there any setup or hidden fees?</summary>
+                    <p class="mt-3 text-sm text-gray-600"><strong>Absolutely not!</strong> The price you see is the price you pay. No setup fees, no hidden charges, no commission on bookings.</p>
+                </details>
+                <details class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                    <summary class="font-semibold text-gray-900 cursor-pointer">Can I cancel my subscription anytime?</summary>
+                    <p class="mt-3 text-sm text-gray-600">Yes, cancel anytime from your dashboard. No cancellation fees. Your plan stays active until the end of the billing period.</p>
+                </details>
+                <details class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                    <summary class="font-semibold text-gray-900 cursor-pointer">Do you offer refunds?</summary>
+                    <p class="mt-3 text-sm text-gray-600">We offer a <strong>7-day money-back guarantee</strong> on all plans. If you're not satisfied, get a full refund — no questions asked.</p>
+                </details>
+                <details class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                    <summary class="font-semibold text-gray-900 cursor-pointer">What payment methods do you accept?</summary>
+                    <div class="mt-3 text-sm text-gray-600">
+                        <p>Credit &amp; Debit Cards (Visa, Mastercard, Amex), Apple Pay, Google Pay, Bank transfers.</p>
+                        <p class="mt-2 text-xs text-gray-500">🔒 All payments processed securely through Stripe.</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <!-- Bottom CTA -->
+        <div class="mt-16 text-center pb-16">
+            <p class="text-gray-600 mb-4">Still have questions? We're here to help!</p>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <a href="/contact" class="inline-flex items-center justify-center h-12 px-8 border-2 border-gray-200 rounded-xl font-medium text-gray-900 hover:bg-gray-50 transition-colors min-w-[180px]">Contact Sales</a>
+                <a href="/become-partner" class="inline-flex items-center justify-center h-12 px-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-medium transition-all min-w-[180px]">Become a Partner</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+@section Scripts {
+<script>
+const basePrices = { basic: 99, standard: 299, business: 499 };
+const discounts = { monthly: {}, 'semi-annual': { basic:15, standard:15, business:20 }, annual: { basic:20, standard:25, business:30 } };
+let currentBilling = 'monthly';
+
+function setBilling(period) {
+    currentBilling = period;
+    const buttons = ['monthly','semi-annual','annual'];
+    buttons.forEach(b => {
+        const btn = document.getElementById('btn-' + b);
+        btn.className = btn.className.replace(/bg-\S+ text-white shadow-md/g, '').replace(/text-gray-700/g, '').trim();
+    });
+    const active = document.getElementById('btn-' + period);
+    if (period === 'monthly') active.classList.add('bg-gray-900','text-white','shadow-md');
+    else if (period === 'semi-annual') active.classList.add('bg-gradient-to-r','from-blue-600','to-cyan-600','text-white','shadow-md');
+    else active.classList.add('bg-gradient-to-r','from-green-600','to-emerald-600','text-white','shadow-md');
+
+    ['basic','standard','business'].forEach(plan => {
+        const base = basePrices[plan];
+        let price, suffix, savings = '';
+        if (period === 'monthly') {
+            price = base; suffix = '/mo';
+        } else {
+            const months = period === 'semi-annual' ? 6 : 12;
+            const disc = discounts[period][plan];
+            price = Math.round(base * months * (1 - disc/100));
+            suffix = period === 'semi-annual' ? '/6mo' : '/yr';
+            const saved = Math.round(base * months * disc / 100);
+            savings = '💚 Save AED ' + saved;
+        }
+        document.getElementById('price-' + plan).textContent = 'AED ' + price;
+        document.getElementById('period-' + plan).textContent = suffix;
+        const savingsEl = document.getElementById('savings-' + plan);
+        if (savings) { savingsEl.textContent = savings; savingsEl.classList.remove('hidden'); }
+        else savingsEl.classList.add('hidden');
+    });
+}
+</script>
+}

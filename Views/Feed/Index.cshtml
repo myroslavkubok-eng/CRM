@@ -1,0 +1,235 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Beauty Feed";
+    ViewData["Description"] = "Discover the latest beauty services, promotions, and last-minute offers from top salons.";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Katia Beauty Platform</title>
+    <meta name="description" content="@ViewData["Description"]" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50">
+
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-md border-b border-purple-100 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between max-w-7xl">
+            <a href="/" class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-sm">K</span>
+                </div>
+                <span class="font-bold text-xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Katia</span>
+            </a>
+            <nav class="hidden md:flex items-center gap-6">
+                <a href="/" class="text-gray-600 hover:text-purple-600 transition-colors text-sm font-medium">Home</a>
+                <a href="/salon/listing" class="text-gray-600 hover:text-purple-600 transition-colors text-sm font-medium">Find Salons</a>
+                <a href="/pricing" class="text-gray-600 hover:text-purple-600 transition-colors text-sm font-medium">Pricing</a>
+                <a href="/auth" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">Sign In</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 pb-20 max-w-5xl">
+
+        <!-- Page Header -->
+        <div class="mb-8 text-center">
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <div class="p-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl text-white shadow-lg">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z"/>
+                    </svg>
+                </div>
+            </div>
+            <h1 class="text-4xl font-bold text-purple-600 mb-2">Beauty Feed</h1>
+            <p class="text-gray-700 text-lg">Discover the latest from salons and exclusive last-minute deals</p>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="flex flex-col gap-4 mb-8">
+            <div class="flex gap-2 sm:gap-3 flex-wrap sm:flex-nowrap justify-center">
+                <button onclick="setFilter('all')" id="filter-all"
+                    class="filter-btn active-filter rounded-full px-4 sm:px-6 py-2 text-sm font-medium transition-all whitespace-nowrap">
+                    All Posts
+                </button>
+                <button onclick="setFilter('post')" id="filter-post"
+                    class="filter-btn inactive-filter rounded-full px-4 sm:px-6 py-2 text-sm font-medium transition-all whitespace-nowrap">
+                    Updates
+                </button>
+                <button onclick="setFilter('last-minute')" id="filter-last-minute"
+                    class="filter-btn inactive-filter rounded-full px-4 sm:px-6 py-2 text-sm font-medium transition-all whitespace-nowrap">
+                    Last Minute
+                </button>
+                <button onclick="setFilter('sale')" id="filter-sale"
+                    class="filter-btn inactive-filter rounded-full px-4 sm:px-6 py-2 text-sm font-medium transition-all whitespace-nowrap">
+                    Sales
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading Skeleton -->
+        <div id="loading-grid" class="grid grid-cols-3 lg:grid-cols-4 gap-1 sm:gap-2">
+            @for (int i = 0; i < 12; i++)
+            {
+                <div class="aspect-square bg-gray-200 animate-pulse rounded-sm"></div>
+            }
+        </div>
+
+        <!-- Posts Grid -->
+        <div id="posts-grid" class="hidden grid grid-cols-3 lg:grid-cols-4 gap-1 sm:gap-2"></div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-20">
+            <div class="w-20 h-20 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-10 h-10 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">No posts yet</h3>
+            <p class="text-gray-600 mb-6" id="empty-msg">Be the first to create a post!</p>
+            <div class="flex gap-3 justify-center">
+                <button onclick="loadDemoPosts()"
+                    class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium px-6 py-2 rounded-lg transition-all flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-14 9V3z"/></svg>
+                    View Demo Feed
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">K</span>
+                    </div>
+                    <span class="text-white font-bold text-lg">Katia</span>
+                </div>
+                <p class="text-sm">&copy; 2024 Katia Beauty Platform. All rights reserved.</p>
+                <div class="flex gap-4 text-sm">
+                    <a href="/pricing" class="hover:text-white transition-colors">Pricing</a>
+                    <a href="/contact" class="hover:text-white transition-colors">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+<style>
+    .active-filter { background: linear-gradient(to right, #9333ea, #ec4899); color: white; box-shadow: 0 4px 15px rgba(147,51,234,0.4); }
+    .inactive-filter { background: white; border: 2px solid #e5e7eb; color: #374151; }
+    .inactive-filter:hover { border-color: #c4b5fd; color: #9333ea; }
+</style>
+<script>
+let allPosts = [];
+let currentFilter = 'all';
+
+const demoPosts = [
+    { id: '1', salonName: 'VLV Beauty Dubai', type: 'post', title: 'Lash & Brow Training', category: 'Education', likes: [], viewsCount: 23200, city: 'Dubai', isPremium: true },
+    { id: '2', salonName: 'MBS Business School', type: 'last-minute', title: 'Business Seminars', category: 'Training', originalPrice: 500, discountPrice: 350, likes: ['u1','u2'], viewsCount: 8942, city: 'Dubai' },
+    { id: '3', salonName: 'Elegant Wedding & Events', type: 'last-minute', title: 'Luxury Wedding Venue', category: 'Weddings', likes: ['u1','u2','u3'], viewsCount: 15340, city: 'Abu Dhabi' },
+    { id: '4', salonName: 'Glamour Studio Dubai', type: 'last-minute', title: 'Eyelash Extension', category: 'Lash & Brow', originalPrice: 300, discountPrice: 225, likes: ['u1'], viewsCount: 5621, city: 'Dubai' },
+    { id: '5', salonName: 'Luxury Spa & Wellness', type: 'post', title: 'Professional Coaching', category: 'Wellness', likes: [], viewsCount: 1586, city: 'New York' },
+    { id: '6', salonName: 'Glamour Studio Dubai', type: 'post', title: 'Beauty & Style Consultation', category: 'Consultation', likes: ['u1','u2','u3','u4'], viewsCount: 9776, city: 'Dubai', isPremium: true },
+    { id: '7', salonName: 'Elite Hair & Spa', type: 'last-minute', title: 'Keratin Hair Treatment', category: 'Hair', originalPrice: 350, discountPrice: 245, likes: ['u1','u2'], viewsCount: 4892, city: 'Sharjah' },
+    { id: '8', salonName: 'Royal Beauty Center', type: 'last-minute', title: 'Salon Management App', category: 'Business', likes: ['u1'], viewsCount: 1034, city: 'Los Angeles' },
+    { id: '9', salonName: 'Beauty Paradise Spa', type: 'post', title: 'Stress Relief Package', category: 'Spa', likes: [], viewsCount: 86, city: 'Dubai' },
+    { id: '10', salonName: 'Glamour Studio Dubai', type: 'last-minute', title: 'Balayage Hair Color', category: 'Hair Coloring', originalPrice: 400, discountPrice: 280, likes: ['u1','u2','u3'], viewsCount: 7234, city: 'Dubai', isPremium: true },
+    { id: '11', salonName: 'Modern Beauty Hub', type: 'post', title: 'Mobile Booking Platform', category: 'Technology', likes: ['u1','u2'], viewsCount: 1139, city: 'London' },
+    { id: '12', salonName: 'Elegant Nails Studio', type: 'post', title: 'Inspirational Journey', category: 'Lifestyle', likes: ['u1','u2','u3','u4','u5'], viewsCount: 3448, city: 'Dubai' },
+];
+
+function setFilter(f) {
+    currentFilter = f;
+    ['all','post','last-minute','sale'].forEach(id => {
+        const btn = document.getElementById('filter-' + id);
+        if (id === f) {
+            btn.className = btn.className.replace('inactive-filter','active-filter');
+        } else {
+            btn.className = btn.className.replace('active-filter','inactive-filter');
+        }
+    });
+    renderPosts(allPosts.length ? allPosts : demoPosts);
+}
+
+function filterPosts(posts) {
+    if (currentFilter === 'all') return posts;
+    if (currentFilter === 'sale') return posts.filter(p => p.originalPrice && p.discountPrice && p.originalPrice > p.discountPrice);
+    return posts.filter(p => p.type === currentFilter);
+}
+
+function renderPosts(posts) {
+    document.getElementById('loading-grid').classList.add('hidden');
+    const filtered = filterPosts(posts);
+    const grid = document.getElementById('posts-grid');
+    const empty = document.getElementById('empty-state');
+
+    if (!filtered.length) {
+        grid.classList.add('hidden');
+        empty.classList.remove('hidden');
+        const msgs = { all: 'Be the first to create a post!', sale: 'No sales available right now', 'last-minute': 'No last-minute deals available', post: 'No updates available' };
+        document.getElementById('empty-msg').textContent = msgs[currentFilter] || '';
+        return;
+    }
+
+    empty.classList.add('hidden');
+    grid.classList.remove('hidden');
+    grid.style.display = 'grid';
+    grid.innerHTML = filtered.map(post => {
+        const hasDiscount = post.originalPrice && post.discountPrice && post.originalPrice > post.discountPrice;
+        const badge = post.type === 'last-minute'
+            ? (hasDiscount
+                ? `<span class="bg-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded">-${Math.round((1 - post.discountPrice/post.originalPrice)*100)}% OFF</span>`
+                : `<span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded">LAST MINUTE</span>`)
+            : (post.isPremium ? `<span class="bg-purple-600 text-white text-xs font-bold px-2 py-0.5 rounded">PREMIUM</span>` : '');
+
+        return `
+        <div class="aspect-square bg-gradient-to-br from-purple-100 to-pink-100 rounded-sm relative overflow-hidden group cursor-pointer hover:opacity-90 transition-opacity">
+            <div class="absolute inset-0 flex flex-col items-center justify-center p-2 text-center">
+                <p class="text-xs font-bold text-gray-800 line-clamp-2 mb-1">${post.title}</p>
+                <p class="text-xs text-gray-600 hidden sm:block">${post.salonName}</p>
+            </div>
+            <div class="absolute top-1 left-1">${badge}</div>
+            <div class="absolute bottom-1 right-1 flex items-center gap-1">
+                <svg class="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                <span class="text-xs text-gray-500">${post.viewsCount?.toLocaleString() || 0}</span>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function loadDemoPosts() {
+    allPosts = demoPosts;
+    renderPosts(demoPosts);
+}
+
+async function loadPosts() {
+    try {
+        const token = localStorage.getItem('auth_token') || '';
+        const resp = await fetch('/api/feed/posts', {
+            headers: token ? { 'Authorization': 'Bearer ' + token } : {}
+        });
+        if (resp.ok) {
+            const data = await resp.json();
+            allPosts = (data.posts || data || []).map(p => ({...p, viewsCount: Math.floor(Math.random()*10000)+500}));
+            if (allPosts.length) {
+                renderPosts(allPosts);
+                return;
+            }
+        }
+    } catch (e) {}
+    // Fallback to demo posts
+    allPosts = demoPosts;
+    renderPosts(demoPosts);
+}
+
+loadPosts();
+</script>
+</body>
+</html>
+
+
