@@ -1,0 +1,401 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Book an Appointment";
+    ViewData["Description"] = "Choose a service, master and time — fast and easy booking.";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Katia Beauty Platform</title>
+    <meta name="description" content="@ViewData["Description"]" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50">
+
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-md border-b border-purple-100 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between max-w-6xl">
+            <a href="/" class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-sm">K</span>
+                </div>
+                <span class="font-bold text-xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Katia</span>
+            </a>
+            <a id="back-to-salon" href="/salon/listing" class="flex items-center gap-2 text-gray-600 hover:text-purple-600 transition-colors text-sm font-medium">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Back to Salon
+            </a>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+
+        <!-- Booking Steps -->
+        <div class="mb-8">
+            <div class="flex items-center justify-center gap-2">
+                @for (int i = 1; i <= 4; i++)
+                {
+                    <div class="flex items-center">
+                        <div id="step-@i" class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold @(i == 1 ? "bg-purple-600 text-white" : "bg-gray-200 text-gray-500")">@i</div>
+                        @if (i < 4)
+                        {
+                            <div class="w-16 h-0.5 bg-gray-200 mx-1"></div>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="flex justify-center gap-8 mt-2">
+                <span class="text-xs text-purple-600 font-medium">Service</span>
+                <span class="text-xs text-gray-400">Master</span>
+                <span class="text-xs text-gray-400">Date & Time</span>
+                <span class="text-xs text-gray-400">Confirm</span>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+
+            <!-- Main Booking Flow -->
+            <div class="md:col-span-2">
+
+                <!-- Step 1: Choose Service -->
+                <div id="booking-step-1" class="bg-white rounded-xl p-6 shadow-sm">
+                    <h2 class="text-xl font-bold mb-4">Select a Service</h2>
+                    <div id="services-loading" class="space-y-3">
+                        @for (int i = 0; i < 4; i++)
+                        {
+                            <div class="h-16 bg-gray-100 animate-pulse rounded-lg"></div>
+                        }
+                    </div>
+                    <div id="services-container" class="hidden space-y-3"></div>
+                </div>
+
+                <!-- Step 2: Choose Master -->
+                <div id="booking-step-2" class="hidden bg-white rounded-xl p-6 shadow-sm">
+                    <h2 class="text-xl font-bold mb-4">Select a Master</h2>
+                    <div id="masters-container" class="grid grid-cols-2 gap-3">
+                        <button onclick="selectMaster(null, 'Any available')"
+                            class="master-card p-4 border-2 border-purple-600 bg-purple-50 rounded-xl text-center transition-all">
+                            <div class="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </div>
+                            <p class="font-medium text-sm text-gray-900">Any Available</p>
+                            <p class="text-xs text-gray-500">Best availability</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Choose Date & Time -->
+                <div id="booking-step-3" class="hidden bg-white rounded-xl p-6 shadow-sm">
+                    <h2 class="text-xl font-bold mb-4">Choose Date & Time</h2>
+                    <div class="mb-6">
+                        <label class="text-sm font-medium text-gray-700 mb-2 block">Select Date</label>
+                        <input type="date" id="booking-date"
+                            class="w-full h-11 px-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 mb-2 block">Available Times</label>
+                        <div id="time-slots" class="grid grid-cols-4 gap-2">
+                            @{
+                                var times = new[] { "09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30" };
+                            }
+                            @foreach (var t in times)
+                            {
+                                <button onclick="selectTime('@t')" class="time-slot py-2 text-sm border border-gray-200 rounded-lg hover:border-purple-400 hover:text-purple-600 hover:bg-purple-50 transition-all font-medium">
+                                    @t
+                                </button>
+                            }
+                        </div>
+                    </div>
+                    <button onclick="goToStep(4)" id="confirm-time-btn"
+                        class="hidden mt-6 w-full h-11 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all">
+                        Continue to Confirmation
+                    </button>
+                </div>
+
+                <!-- Step 4: Confirm -->
+                <div id="booking-step-4" class="hidden bg-white rounded-xl p-6 shadow-sm">
+                    <h2 class="text-xl font-bold mb-6">Confirm Your Booking</h2>
+
+                    <div id="booking-summary" class="space-y-4 mb-6 p-4 bg-purple-50 rounded-xl">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Service</span>
+                            <span id="summary-service" class="font-medium text-gray-900"></span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Master</span>
+                            <span id="summary-master" class="font-medium text-gray-900"></span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Date & Time</span>
+                            <span id="summary-datetime" class="font-medium text-gray-900"></span>
+                        </div>
+                        <div class="flex justify-between text-sm border-t border-purple-200 pt-3">
+                            <span class="text-gray-700 font-semibold">Total</span>
+                            <span id="summary-price" class="font-bold text-purple-600 text-lg"></span>
+                        </div>
+                    </div>
+
+                    <!-- Guest Fields if not logged in -->
+                    <div id="guest-fields" class="space-y-4 mb-6">
+                        <p class="text-sm text-gray-600 font-medium">Your contact details</p>
+                        <input type="text" id="guest-name" placeholder="Your full name" required
+                            class="w-full h-11 px-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                        <input type="tel" id="guest-phone" placeholder="Phone number" required
+                            class="w-full h-11 px-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                        <input type="email" id="guest-email" placeholder="Email (optional)"
+                            class="w-full h-11 px-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                    </div>
+
+                    <div id="booking-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm"></div>
+                    <div id="booking-success" class="hidden mb-4 p-4 bg-green-50 border border-green-200 rounded-xl text-green-700">
+                        <p class="font-bold mb-1">Booking Confirmed!</p>
+                        <p class="text-sm">Your appointment has been booked successfully. You'll receive a confirmation shortly.</p>
+                    </div>
+
+                    <button onclick="confirmBooking()" id="confirm-btn"
+                        class="w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-60">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Confirm Booking
+                    </button>
+                </div>
+            </div>
+
+            <!-- Booking Summary Sidebar -->
+            <div>
+                <div class="bg-white rounded-xl p-5 shadow-sm sticky top-24">
+                    <h3 class="font-bold text-gray-900 mb-4">Your Selection</h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between items-start">
+                            <span class="text-gray-500">Service</span>
+                            <span id="side-service" class="font-medium text-gray-900 text-right">—</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Master</span>
+                            <span id="side-master" class="font-medium text-gray-900">—</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Date</span>
+                            <span id="side-date" class="font-medium text-gray-900">—</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Time</span>
+                            <span id="side-time" class="font-medium text-gray-900">—</span>
+                        </div>
+                        <div class="flex justify-between pt-3 border-t border-gray-100">
+                            <span class="font-bold text-gray-700">Total</span>
+                            <span id="side-total" class="font-bold text-purple-600 text-base">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+const pathParts = window.location.pathname.split('/');
+const salonId = pathParts[pathParts.length - 1];
+let booking = { service: null, masterId: null, masterName: 'Any available', date: null, time: null };
+let currentStep = 1;
+
+// Set min date to today
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('booking-date').min = today;
+document.getElementById('booking-date').value = today;
+
+document.getElementById('back-to-salon').href = '/salon/profile/' + salonId;
+
+async function loadSalonData() {
+    try {
+        const resp = await fetch('/api/salons/' + salonId);
+        if (!resp.ok) throw new Error();
+        const data = await resp.json();
+        const salon = data.salon || data;
+        const services = salon.services || [];
+
+        document.getElementById('services-loading').classList.add('hidden');
+        const container = document.getElementById('services-container');
+        container.classList.remove('hidden');
+
+        if (!services.length) {
+            container.innerHTML = '<p class="text-gray-500 text-sm">No services available for this salon.</p>';
+            return;
+        }
+
+        container.innerHTML = services.map(s => `
+            <button onclick='selectService(${JSON.stringify(s)})'
+                class="service-card w-full flex items-center justify-between p-4 border-2 border-gray-100 rounded-xl hover:border-purple-400 hover:bg-purple-50 transition-all text-left">
+                <div>
+                    <p class="font-semibold text-gray-900">${s.name}</p>
+                    <p class="text-sm text-gray-500">${s.duration || 60} min · ${s.category || 'General'}</p>
+                </div>
+                <span class="font-bold text-purple-600">AED ${s.price || 0}</span>
+            </button>
+        `).join('');
+
+        // Load masters
+        loadMasters(salonId);
+    } catch {
+        document.getElementById('services-loading').innerHTML = '<p class="text-red-500 text-sm">Could not load services.</p>';
+    }
+}
+
+async function loadMasters(sid) {
+    try {
+        const resp = await fetch('/api/masters/salon/' + sid);
+        if (!resp.ok) return;
+        const masters = await resp.json();
+        const container = document.getElementById('masters-container');
+
+        (masters.masters || masters || []).forEach(m => {
+            const btn = document.createElement('button');
+            btn.className = 'master-card p-4 border-2 border-gray-100 rounded-xl text-center hover:border-purple-400 transition-all';
+            btn.innerHTML = `
+                <div class="w-12 h-12 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-2 text-lg font-bold text-purple-600">
+                    ${m.name ? m.name[0] : 'M'}
+                </div>
+                <p class="font-medium text-sm text-gray-900">${m.name || 'Master'}</p>
+                <p class="text-xs text-gray-500">${m.specialty || ''}</p>
+            `;
+            btn.onclick = () => selectMaster(m.id, m.name);
+            container.appendChild(btn);
+        });
+    } catch {}
+}
+
+function selectService(service) {
+    booking.service = service;
+    document.querySelectorAll('.service-card').forEach(el => {
+        el.classList.remove('border-purple-600', 'bg-purple-50');
+        el.classList.add('border-gray-100');
+    });
+    event.currentTarget.classList.add('border-purple-600', 'bg-purple-50');
+    event.currentTarget.classList.remove('border-gray-100');
+    document.getElementById('side-service').textContent = service.name;
+    document.getElementById('side-total').textContent = 'AED ' + (service.price || 0);
+    setTimeout(() => goToStep(2), 300);
+}
+
+function selectMaster(id, name) {
+    booking.masterId = id;
+    booking.masterName = name;
+    document.querySelectorAll('.master-card').forEach(el => {
+        el.classList.remove('border-purple-600', 'bg-purple-50');
+        el.classList.add('border-gray-100');
+    });
+    event.currentTarget.classList.add('border-purple-600', 'bg-purple-50');
+    event.currentTarget.classList.remove('border-gray-100');
+    document.getElementById('side-master').textContent = name;
+    setTimeout(() => goToStep(3), 300);
+}
+
+function selectTime(time) {
+    booking.time = time;
+    booking.date = document.getElementById('booking-date').value;
+    document.querySelectorAll('.time-slot').forEach(el => {
+        el.classList.remove('border-purple-600', 'bg-purple-600', 'text-white');
+        el.classList.add('border-gray-200');
+    });
+    event.currentTarget.classList.add('border-purple-600', 'bg-purple-600', 'text-white');
+    event.currentTarget.classList.remove('border-gray-200');
+    document.getElementById('side-time').textContent = time;
+    document.getElementById('side-date').textContent = booking.date;
+    document.getElementById('confirm-time-btn').classList.remove('hidden');
+}
+
+function goToStep(step) {
+    for (let i = 1; i <= 4; i++) {
+        document.getElementById('booking-step-' + i).classList.toggle('hidden', i !== step);
+        const stepEl = document.getElementById('step-' + i);
+        if (i < step) {
+            stepEl.className = 'w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-green-500 text-white';
+            stepEl.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+        } else if (i === step) {
+            stepEl.className = 'w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-purple-600 text-white';
+            stepEl.textContent = i;
+        } else {
+            stepEl.className = 'w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-gray-200 text-gray-500';
+            stepEl.textContent = i;
+        }
+    }
+    currentStep = step;
+
+    if (step === 4) {
+        document.getElementById('summary-service').textContent = booking.service?.name || '—';
+        document.getElementById('summary-master').textContent = booking.masterName;
+        document.getElementById('summary-datetime').textContent = booking.date + ' at ' + booking.time;
+        document.getElementById('summary-price').textContent = 'AED ' + (booking.service?.price || 0);
+    }
+}
+
+async function confirmBooking() {
+    const btn = document.getElementById('confirm-btn');
+    const errorEl = document.getElementById('booking-error');
+    const successEl = document.getElementById('booking-success');
+
+    const name = document.getElementById('guest-name').value;
+    const phone = document.getElementById('guest-phone').value;
+
+    if (!name || !phone) {
+        errorEl.textContent = 'Please enter your name and phone number.';
+        errorEl.classList.remove('hidden');
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Booking...';
+    errorEl.classList.add('hidden');
+
+    const token = localStorage.getItem('auth_token') || '';
+    const bookingDate = new Date(booking.date + 'T' + booking.time);
+
+    try {
+        const resp = await fetch('/api/bookings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+            },
+            body: JSON.stringify({
+                salonId: salonId,
+                serviceId: booking.service?.id,
+                masterId: booking.masterId,
+                startTime: bookingDate.toISOString(),
+                customerName: name,
+                customerPhone: phone,
+                customerEmail: document.getElementById('guest-email').value
+            })
+        });
+
+        if (resp.ok) {
+            successEl.classList.remove('hidden');
+            btn.classList.add('hidden');
+        } else {
+            const err = await resp.json();
+            errorEl.textContent = err.message || 'Booking failed. Please try again.';
+            errorEl.classList.remove('hidden');
+        }
+    } catch {
+        errorEl.textContent = 'Network error. Please try again.';
+        errorEl.classList.remove('hidden');
+    } finally {
+        if (!document.getElementById('booking-success').classList.contains('hidden')) return;
+        btn.disabled = false;
+        btn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Confirm Booking';
+    }
+}
+
+if (salonId && salonId !== 'booking') loadSalonData();
+</script>
+</body>
+</html>
+
+

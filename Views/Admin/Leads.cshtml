@@ -1,0 +1,279 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Leads Management";
+    ViewData["Description"] = "Manage partner leads and subscription inquiries.";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Katia Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-50">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="flex items-center justify-between px-6 py-4">
+            <div class="flex items-center gap-3">
+                <a href="/" class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">K</span>
+                    </div>
+                    <span class="font-bold text-lg bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Katia</span>
+                </a>
+                <span class="text-gray-300">/</span>
+                <span class="text-gray-700 font-semibold">Leads Management</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="fetchLeads()" class="text-sm text-gray-600 hover:text-purple-600 flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    Refresh
+                </button>
+                <a href="/dashboard/superadmin" class="text-sm text-gray-600 hover:text-purple-600">← Dashboard</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="p-6 max-w-7xl mx-auto">
+
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                <p class="text-xs text-gray-500 mb-1">Total Leads</p>
+                <p id="stat-total" class="text-2xl font-bold text-gray-900">—</p>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                <p class="text-xs text-gray-500 mb-1">New</p>
+                <p id="stat-new" class="text-2xl font-bold text-blue-600">—</p>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                <p class="text-xs text-gray-500 mb-1">Contacted</p>
+                <p id="stat-contacted" class="text-2xl font-bold text-yellow-600">—</p>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                <p class="text-xs text-gray-500 mb-1">Converted</p>
+                <p id="stat-converted" class="text-2xl font-bold text-green-600">—</p>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 mb-6">
+            <div class="flex flex-col sm:flex-row gap-3">
+                <div class="relative flex-1">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input type="text" id="search-input" placeholder="Search by name, email, phone..."
+                        class="w-full h-10 pl-9 pr-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        oninput="applyFilters()" />
+                </div>
+                <select id="status-filter" onchange="applyFilters()"
+                    class="h-10 px-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 w-full sm:w-40">
+                    <option value="all">All Statuses</option>
+                    <option value="new">New</option>
+                    <option value="contacted">Contacted</option>
+                    <option value="converted">Converted</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading-state" class="text-center py-16">
+            <div class="inline-flex items-center gap-2 text-gray-500">
+                <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                Loading leads...
+            </div>
+        </div>
+
+        <!-- Error -->
+        <div id="error-state" class="hidden text-center py-16">
+            <p class="text-red-500 mb-2">Failed to load leads.</p>
+            <p class="text-gray-500 text-sm mb-4">Make sure you are logged in as a Super Admin.</p>
+            <a href="/auth" class="text-purple-600 hover:underline text-sm">Sign In</a>
+        </div>
+
+        <!-- Leads Table -->
+        <div id="leads-table" class="hidden bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Business</th>
+                        <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Contact</th>
+                        <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden lg:table-cell">City</th>
+                        <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Status</th>
+                        <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Date</th>
+                        <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="leads-body" class="divide-y divide-gray-100"></tbody>
+            </table>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-16">
+            <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <p class="text-gray-500 font-medium">No leads found</p>
+        </div>
+    </main>
+
+<script>
+let allLeads = [];
+
+const statusColors = {
+    new: 'bg-blue-100 text-blue-700',
+    contacted: 'bg-yellow-100 text-yellow-700',
+    converted: 'bg-green-100 text-green-700',
+    rejected: 'bg-red-100 text-red-700'
+};
+
+async function fetchLeads() {
+    document.getElementById('loading-state').classList.remove('hidden');
+    document.getElementById('leads-table').classList.add('hidden');
+    document.getElementById('empty-state').classList.add('hidden');
+    document.getElementById('error-state').classList.add('hidden');
+
+    const token = localStorage.getItem('auth_token') || '';
+    try {
+        const resp = await fetch('/api/leads', {
+            headers: token ? { 'Authorization': 'Bearer ' + token } : {}
+        });
+
+        if (!resp.ok) {
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('error-state').classList.remove('hidden');
+            return;
+        }
+
+        const data = await resp.json();
+        allLeads = data.leads || data || [];
+        updateStats(allLeads);
+        applyFilters();
+    } catch {
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('error-state').classList.remove('hidden');
+    }
+}
+
+function updateStats(leads) {
+    document.getElementById('stat-total').textContent = leads.length;
+    document.getElementById('stat-new').textContent = leads.filter(l => l.status === 'new').length;
+    document.getElementById('stat-contacted').textContent = leads.filter(l => l.status === 'contacted').length;
+    document.getElementById('stat-converted').textContent = leads.filter(l => l.status === 'converted').length;
+}
+
+function applyFilters() {
+    const search = document.getElementById('search-input').value.toLowerCase();
+    const status = document.getElementById('status-filter').value;
+
+    let filtered = allLeads.filter(lead => {
+        const matchSearch = !search ||
+            (lead.businessName || '').toLowerCase().includes(search) ||
+            (lead.ownerName || lead.fullName || '').toLowerCase().includes(search) ||
+            (lead.email || '').toLowerCase().includes(search) ||
+            (lead.phone || lead.phoneNumber || '').includes(search);
+
+        const matchStatus = status === 'all' || lead.status === status;
+        return matchSearch && matchStatus;
+    });
+
+    renderLeads(filtered);
+}
+
+function renderLeads(leads) {
+    document.getElementById('loading-state').classList.add('hidden');
+
+    if (!leads.length) {
+        document.getElementById('leads-table').classList.add('hidden');
+        document.getElementById('empty-state').classList.remove('hidden');
+        return;
+    }
+
+    document.getElementById('empty-state').classList.add('hidden');
+    document.getElementById('leads-table').classList.remove('hidden');
+
+    document.getElementById('leads-body').innerHTML = leads.map(lead => `
+        <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-4 py-3">
+                <p class="font-medium text-gray-900 text-sm">${lead.businessName || '—'}</p>
+                <p class="text-xs text-gray-500">${lead.ownerName || lead.fullName || '—'}</p>
+            </td>
+            <td class="px-4 py-3 hidden md:table-cell">
+                <p class="text-sm text-gray-700">${lead.email || '—'}</p>
+                <p class="text-xs text-gray-500">${lead.phone || lead.phoneNumber || '—'}</p>
+            </td>
+            <td class="px-4 py-3 hidden lg:table-cell">
+                <p class="text-sm text-gray-700">${lead.city || '—'}</p>
+            </td>
+            <td class="px-4 py-3">
+                <select onchange="updateStatus('${lead.id}', this.value)"
+                    class="text-xs font-medium px-2 py-1 rounded-full border-0 focus:ring-2 focus:ring-purple-500 ${statusColors[lead.status] || 'bg-gray-100 text-gray-700'}">
+                    <option value="new" ${lead.status === 'new' ? 'selected' : ''}>New</option>
+                    <option value="contacted" ${lead.status === 'contacted' ? 'selected' : ''}>Contacted</option>
+                    <option value="converted" ${lead.status === 'converted' ? 'selected' : ''}>Converted</option>
+                    <option value="rejected" ${lead.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                </select>
+            </td>
+            <td class="px-4 py-3 hidden md:table-cell">
+                <p class="text-xs text-gray-500">${lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : '—'}</p>
+            </td>
+            <td class="px-4 py-3">
+                <button onclick="deleteLead('${lead.id}')"
+                    class="text-red-400 hover:text-red-600 transition-colors p-1 rounded" title="Delete">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+async function updateStatus(leadId, status) {
+    const token = localStorage.getItem('auth_token') || '';
+    try {
+        await fetch('/api/leads/' + leadId + '/status', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+            },
+            body: JSON.stringify({ status })
+        });
+        const lead = allLeads.find(l => l.id === leadId);
+        if (lead) lead.status = status;
+        updateStats(allLeads);
+    } catch (e) {
+        console.error('Failed to update status', e);
+    }
+}
+
+async function deleteLead(leadId) {
+    if (!confirm('Delete this lead?')) return;
+    const token = localStorage.getItem('auth_token') || '';
+    try {
+        const resp = await fetch('/api/leads/' + leadId, {
+            method: 'DELETE',
+            headers: token ? { 'Authorization': 'Bearer ' + token } : {}
+        });
+        if (resp.ok) {
+            allLeads = allLeads.filter(l => l.id !== leadId);
+            updateStats(allLeads);
+            applyFilters();
+        }
+    } catch (e) {
+        console.error('Failed to delete lead', e);
+    }
+}
+
+fetchLeads();
+</script>
+</body>
+</html>
+
+

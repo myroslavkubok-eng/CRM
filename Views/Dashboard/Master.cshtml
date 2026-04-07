@@ -1,0 +1,199 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Master Dashboard";
+    ViewData["Description"] = "Your personal schedule, bookings, and client management.";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Katia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-50">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- Sidebar -->
+        <aside class="w-60 bg-white border-r border-gray-200 flex flex-col hidden md:flex">
+            <div class="p-5 border-b border-gray-200">
+                <a href="/" class="flex items-center gap-2">
+                    <div class="w-7 h-7 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-xs">K</span>
+                    </div>
+                    <span class="font-bold text-base bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Katia</span>
+                </a>
+                <p class="text-xs text-gray-500 mt-1">Master Dashboard</p>
+            </div>
+            <nav class="flex-1 p-3 space-y-1">
+                <a href="#" onclick="showPanel('schedule')" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    My Schedule
+                </a>
+                <a href="#" onclick="showPanel('bookings')" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                    Bookings
+                </a>
+                <a href="#" onclick="showPanel('clients')" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    My Clients
+                </a>
+            </nav>
+            <div class="p-4 border-t border-gray-200">
+                <button onclick="signOut()" class="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                    Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-y-auto">
+            <div class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                <div>
+                    <h1 class="text-xl font-bold text-gray-900">Master Dashboard</h1>
+                    <p id="master-name" class="text-sm text-gray-500">Loading...</p>
+                </div>
+                <div class="w-9 h-9 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
+                    <span id="user-initial" class="text-white font-bold text-sm">?</span>
+                </div>
+            </div>
+
+            <div class="p-6">
+
+                <!-- Stats Row -->
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 text-center">
+                        <p class="text-xs text-gray-500 mb-1">Today</p>
+                        <p id="stat-today" class="text-2xl font-bold text-purple-600">—</p>
+                        <p class="text-xs text-gray-400">bookings</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 text-center">
+                        <p class="text-xs text-gray-500 mb-1">This Week</p>
+                        <p id="stat-week" class="text-2xl font-bold text-blue-600">—</p>
+                        <p class="text-xs text-gray-400">bookings</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 text-center">
+                        <p class="text-xs text-gray-500 mb-1">Clients</p>
+                        <p id="stat-clients" class="text-2xl font-bold text-green-600">—</p>
+                        <p class="text-xs text-gray-400">total</p>
+                    </div>
+                </div>
+
+                <!-- Schedule Panel -->
+                <div id="panel-schedule">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h2 class="text-lg font-bold mb-4">Today's Schedule</h2>
+                        <div id="schedule-content" class="text-center py-8 text-gray-400 text-sm">Loading schedule...</div>
+                    </div>
+                </div>
+
+                <!-- Bookings Panel -->
+                <div id="panel-bookings" class="hidden">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h2 class="text-lg font-bold mb-4">All My Bookings</h2>
+                        <div id="bookings-content" class="text-center py-8 text-gray-400 text-sm">Loading bookings...</div>
+                    </div>
+                </div>
+
+                <!-- Clients Panel -->
+                <div id="panel-clients" class="hidden">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h2 class="text-lg font-bold mb-4">My Clients</h2>
+                        <div id="clients-content" class="text-center py-8 text-gray-400 text-sm">Loading clients...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+let masterId = null;
+
+async function init() {
+    const token = localStorage.getItem('auth_token');
+    if (!token) { window.location.href = '/auth'; return; }
+
+    try {
+        const resp = await fetch('/api/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
+        if (!resp.ok) { window.location.href = '/auth'; return; }
+        const user = await resp.json();
+        const name = user.fullName || user.email || 'Master';
+        document.getElementById('master-name').textContent = name;
+        document.getElementById('user-initial').textContent = name[0].toUpperCase();
+
+        // Load master profile
+        const mResp = await fetch('/api/masters/user/' + user.id, { headers: { 'Authorization': 'Bearer ' + token } });
+        if (mResp.ok) {
+            const data = await mResp.json();
+            const master = data.master || data;
+            if (master) { masterId = master.id; }
+        }
+        loadSchedule(user.id, token);
+    } catch { window.location.href = '/auth'; }
+}
+
+async function loadSchedule(userId, token) {
+    try {
+        const today = new Date().toISOString().split('T')[0];
+        const url = masterId ? '/api/bookings?masterId=' + masterId : '/api/bookings?userId=' + userId;
+        const resp = await fetch(url, { headers: { 'Authorization': 'Bearer ' + token } });
+
+        if (resp.ok) {
+            const data = await resp.json();
+            const bookings = data.bookings || data || [];
+            const today = new Date().toDateString();
+            const todayBookings = bookings.filter(b => new Date(b.startTime).toDateString() === today);
+            const weekBookings = bookings.filter(b => {
+                const d = new Date(b.startTime);
+                const now = new Date();
+                const diff = (d - now) / (1000 * 60 * 60 * 24);
+                return diff >= -1 && diff < 7;
+            });
+
+            document.getElementById('stat-today').textContent = todayBookings.length;
+            document.getElementById('stat-week').textContent = weekBookings.length;
+            document.getElementById('stat-clients').textContent = new Set(bookings.map(b => b.clientId)).size;
+
+            const el = document.getElementById('schedule-content');
+            if (!todayBookings.length) {
+                el.innerHTML = '<p>No bookings today. Enjoy your day! 🌟</p>';
+                return;
+            }
+            el.innerHTML = todayBookings.sort((a,b) => new Date(a.startTime) - new Date(b.startTime)).map(b => `
+                <div class="flex items-center gap-4 p-3 rounded-lg border border-gray-100 hover:bg-gray-50 mb-2">
+                    <div class="w-16 text-center">
+                        <p class="text-sm font-bold text-purple-600">${new Date(b.startTime).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</p>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-medium text-gray-900">${b.clientName || '—'}</p>
+                        <p class="text-sm text-gray-500">${b.serviceName || '—'}</p>
+                    </div>
+                    <span class="px-2 py-0.5 rounded-full text-xs font-medium ${b.status === 'confirmed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">${b.status || 'pending'}</span>
+                </div>
+            `).join('');
+        } else {
+            document.getElementById('schedule-content').textContent = 'Could not load schedule.';
+        }
+    } catch {
+        document.getElementById('schedule-content').textContent = 'Error loading schedule.';
+    }
+}
+
+function showPanel(name) {
+    ['schedule','bookings','clients'].forEach(p => document.getElementById('panel-' + p).classList.toggle('hidden', p !== name));
+}
+
+function signOut() {
+    localStorage.removeItem('auth_token');
+    window.location.href = '/';
+}
+
+init();
+</script>
+</body>
+</html>
+
+
