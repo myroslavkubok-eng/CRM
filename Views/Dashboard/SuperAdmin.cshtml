@@ -1,0 +1,276 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Super Admin Dashboard";
+    ViewData["Description"] = "Platform-wide management, salons, subscriptions, and leads.";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Katia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-900 text-white">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- Dark Sidebar -->
+        <aside class="w-64 bg-gray-800 border-r border-gray-700 flex flex-col hidden md:flex">
+            <div class="p-6 border-b border-gray-700">
+                <a href="/" class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">K</span>
+                    </div>
+                    <span class="font-bold text-lg text-white">Katia</span>
+                </a>
+                <span class="text-xs bg-red-500 text-white font-semibold px-2 py-0.5 rounded-full mt-2 inline-block">Super Admin</span>
+            </div>
+            <nav class="flex-1 p-4 space-y-1">
+                <a href="#" onclick="showPanel('overview')" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    Platform Overview
+                </a>
+                <a href="#" onclick="showPanel('salons')" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    Salons
+                </a>
+                <a href="/admin/leads" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    Leads
+                </a>
+                <a href="#" onclick="showPanel('support')" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                    Support
+                </a>
+                <a href="#" onclick="showPanel('users')" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    Users
+                </a>
+            </nav>
+            <div class="p-4 border-t border-gray-700">
+                <button onclick="signOut()" class="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-red-400 hover:bg-gray-700 rounded-lg transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                    Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <div class="flex-1 overflow-y-auto bg-gray-50 text-gray-900">
+            <div class="bg-gray-800 text-white px-6 py-4 flex items-center justify-between">
+                <div>
+                    <h1 class="text-xl font-bold">Super Admin Dashboard</h1>
+                    <p class="text-gray-400 text-sm">Platform-wide control panel</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span id="admin-name" class="text-sm text-gray-300"></span>
+                    <div class="w-9 h-9 bg-red-500 rounded-full flex items-center justify-center">
+                        <span id="admin-initial" class="text-white font-bold text-sm">S</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6">
+
+                <!-- Overview Panel -->
+                <div id="panel-overview">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                            <p class="text-xs text-gray-500 mb-1">Total Salons</p>
+                            <p id="st-salons" class="text-3xl font-bold text-purple-600">—</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                            <p class="text-xs text-gray-500 mb-1">Total Bookings</p>
+                            <p id="st-bookings" class="text-3xl font-bold text-blue-600">—</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                            <p class="text-xs text-gray-500 mb-1">New Leads</p>
+                            <p id="st-leads" class="text-3xl font-bold text-green-600">—</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                            <p class="text-xs text-gray-500 mb-1">Support Msgs</p>
+                            <p id="st-support" class="text-3xl font-bold text-orange-500">—</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div class="grid md:grid-cols-3 gap-4 mb-6">
+                        <a href="/admin/leads" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:border-purple-300 transition-colors block">
+                            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-3">
+                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            </div>
+                            <h3 class="font-bold text-gray-900">Manage Leads</h3>
+                            <p class="text-sm text-gray-500 mt-1">View and manage all partner leads</p>
+                        </a>
+                        <div onclick="showPanel('salons')" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:border-purple-300 transition-colors cursor-pointer">
+                            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-3">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                            </div>
+                            <h3 class="font-bold text-gray-900">Salons</h3>
+                            <p class="text-sm text-gray-500 mt-1">Monitor all registered salons</p>
+                        </div>
+                        <div onclick="showPanel('support')" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:border-purple-300 transition-colors cursor-pointer">
+                            <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-3">
+                                <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                            </div>
+                            <h3 class="font-bold text-gray-900">Support Messages</h3>
+                            <p class="text-sm text-gray-500 mt-1">Respond to user inquiries</p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Salons -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h2 class="text-lg font-bold mb-4">Recently Added Salons</h2>
+                        <div id="recent-salons"></div>
+                    </div>
+                </div>
+
+                <!-- Salons Panel -->
+                <div id="panel-salons" class="hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold">All Salons</h2>
+                        <input type="text" placeholder="Search salons..." oninput="filterSalons(this.value)"
+                            class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 w-64" />
+                    </div>
+                    <div id="salons-table" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                        <p class="text-center py-8 text-gray-400 text-sm">Loading salons...</p>
+                    </div>
+                </div>
+
+                <!-- Support Panel -->
+                <div id="panel-support" class="hidden">
+                    <h2 class="text-xl font-bold mb-4">Support Messages</h2>
+                    <div id="support-table" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                        <p class="text-center py-8 text-gray-400 text-sm">Loading messages...</p>
+                    </div>
+                </div>
+
+                <!-- Users Panel -->
+                <div id="panel-users" class="hidden">
+                    <h2 class="text-xl font-bold mb-4">Platform Users</h2>
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center text-gray-400">
+                        User management coming soon.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+let allSalonsData = [];
+
+async function init() {
+    const token = localStorage.getItem('auth_token');
+    if (!token) { window.location.href = '/auth'; return; }
+
+    try {
+        const resp = await fetch('/api/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
+        if (!resp.ok) { window.location.href = '/auth'; return; }
+        const user = await resp.json();
+        document.getElementById('admin-name').textContent = user.fullName || user.email;
+        document.getElementById('admin-initial').textContent = (user.fullName || user.email || 'S')[0].toUpperCase();
+        loadPlatformData(token);
+    } catch { window.location.href = '/auth'; }
+}
+
+async function loadPlatformData(token) {
+    const authHeader = { 'Authorization': 'Bearer ' + token };
+
+    try {
+        const [sResp, bResp, lResp, msgResp] = await Promise.all([
+            fetch('/api/salons', { headers: authHeader }),
+            fetch('/api/bookings', { headers: authHeader }),
+            fetch('/api/leads', { headers: authHeader }),
+            fetch('/api/support-messages', { headers: authHeader })
+        ]);
+
+        if (sResp.ok) {
+            const data = await sResp.json();
+            allSalonsData = data.salons || data || [];
+            document.getElementById('st-salons').textContent = allSalonsData.length;
+            renderRecentSalons(allSalonsData.slice(0, 5));
+            renderSalonsTable(allSalonsData);
+        }
+        if (bResp.ok) {
+            const data = await bResp.json();
+            document.getElementById('st-bookings').textContent = (data.bookings || data || []).length;
+        }
+        if (lResp.ok) {
+            const data = await lResp.json();
+            const leads = data.leads || data || [];
+            document.getElementById('st-leads').textContent = leads.filter(l => l.status === 'new').length;
+        }
+        if (msgResp.ok) {
+            const data = await msgResp.json();
+            const msgs = data.messages || data || [];
+            document.getElementById('st-support').textContent = msgs.filter(m => m.status === 'open' || m.status === 'new').length;
+            renderSupportTable(msgs);
+        }
+    } catch {}
+}
+
+function renderRecentSalons(salons) {
+    document.getElementById('recent-salons').innerHTML = salons.length
+        ? `<div class="space-y-2">${salons.map(s => `
+            <div class="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+                <div><p class="font-medium text-sm">${s.name}</p><p class="text-xs text-gray-500">${s.city || s.address || '—'}</p></div>
+                <span class="text-xs text-gray-400">${s.createdAt ? new Date(s.createdAt).toLocaleDateString() : '—'}</span>
+            </div>`).join('')}</div>`
+        : '<p class="text-gray-400 text-sm text-center py-4">No salons registered yet.</p>';
+}
+
+function renderSalonsTable(salons) {
+    document.getElementById('salons-table').innerHTML = salons.length
+        ? `<table class="w-full text-sm"><thead class="bg-gray-50 border-b border-gray-200">
+            <tr><th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">Name</th>
+                <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 hidden md:table-cell">Location</th>
+                <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">Plan</th>
+                <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 hidden lg:table-cell">Created</th>
+            </tr></thead><tbody class="divide-y divide-gray-100">
+            ${salons.map(s => `<tr class="hover:bg-gray-50">
+                <td class="px-4 py-3 font-medium">${s.name}</td>
+                <td class="px-4 py-3 text-gray-600 hidden md:table-cell">${s.city || s.address || '—'}</td>
+                <td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700">${s.plan || 'Basic'}</span></td>
+                <td class="px-4 py-3 text-gray-500 hidden lg:table-cell text-xs">${s.createdAt ? new Date(s.createdAt).toLocaleDateString() : '—'}</td>
+            </tr>`).join('')}</tbody></table>`
+        : '<p class="text-center py-8 text-gray-400 text-sm">No salons found.</p>';
+}
+
+function renderSupportTable(msgs) {
+    document.getElementById('support-table').innerHTML = msgs.length
+        ? `<table class="w-full text-sm"><thead class="bg-gray-50 border-b border-gray-200">
+            <tr><th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">From</th>
+                <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">Subject</th>
+                <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">Status</th>
+                <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 hidden md:table-cell">Date</th>
+            </tr></thead><tbody class="divide-y divide-gray-100">
+            ${msgs.slice(0,20).map(m => `<tr class="hover:bg-gray-50">
+                <td class="px-4 py-3"><p class="font-medium">${m.name || '—'}</p><p class="text-xs text-gray-500">${m.email || ''}</p></td>
+                <td class="px-4 py-3 text-gray-700">${m.subject || '—'}</td>
+                <td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-medium ${m.status === 'resolved' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">${m.status || 'open'}</span></td>
+                <td class="px-4 py-3 text-xs text-gray-500 hidden md:table-cell">${m.createdAt ? new Date(m.createdAt).toLocaleDateString() : '—'}</td>
+            </tr>`).join('')}</tbody></table>`
+        : '<p class="text-center py-8 text-gray-400 text-sm">No messages.</p>';
+}
+
+function filterSalons(query) {
+    const filtered = allSalonsData.filter(s =>
+        (s.name || '').toLowerCase().includes(query.toLowerCase()) ||
+        (s.city || '').toLowerCase().includes(query.toLowerCase())
+    );
+    renderSalonsTable(filtered);
+}
+
+function showPanel(name) {
+    ['overview','salons','support','users'].forEach(p => document.getElementById('panel-' + p).classList.toggle('hidden', p !== name));
+}
+
+function signOut() { localStorage.removeItem('auth_token'); window.location.href = '/'; }
+init();
+</script>
+</body>
+</html>
+
+

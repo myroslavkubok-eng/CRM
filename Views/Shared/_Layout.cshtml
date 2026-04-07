@@ -1,0 +1,50 @@
+@{
+    var webRoot = Context.RequestServices.GetRequiredService<IWebHostEnvironment>().WebRootPath;
+    var assetsDir = System.IO.Path.Combine(webRoot, "assets");
+
+    string? cssHref = null;
+    string? jsSrc = null;
+
+    if (System.IO.Directory.Exists(assetsDir))
+    {
+        var cssFile = System.IO.Directory.GetFiles(assetsDir, "index-*.css").FirstOrDefault();
+        var jsFile  = System.IO.Directory.GetFiles(assetsDir, "index-*.js").FirstOrDefault();
+        if (cssFile is not null) cssHref = "/assets/" + System.IO.Path.GetFileName(cssFile);
+        if (jsFile  is not null) jsSrc   = "/assets/" + System.IO.Path.GetFileName(jsFile);
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <title>@ViewData["Title"] - Katia Beauty Platform</title>
+    <meta name="description" content="@(ViewData["Description"] ?? "Comprehensive SaaS platform for beauty salons.")" />
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-152x152.png" />
+    <link rel="shortcut icon" href="/icons/icon-96x96.png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#9333ea" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Katia" />
+
+    @await RenderSectionAsync("Styles", required: false)
+
+    @if (cssHref is not null)
+    {
+        <link rel="stylesheet" crossorigin href="@cssHref" />
+    }
+
+    @* Tailwind CDN for Razor views (compiled CSS may not include all classes) *@
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    @RenderBody()
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
