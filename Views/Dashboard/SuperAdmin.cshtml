@@ -166,7 +166,7 @@ async function init() {
     if (!token) { window.location.href = '/auth'; return; }
 
     try {
-        const resp = await fetch('/api/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
+        const resp = await fetch('/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
         if (!resp.ok) { window.location.href = '/auth'; return; }
         const user = await resp.json();
         document.getElementById('admin-name').textContent = user.fullName || user.email;
@@ -180,10 +180,10 @@ async function loadPlatformData(token) {
 
     try {
         const [sResp, bResp, lResp, msgResp] = await Promise.all([
-            fetch('/api/salons', { headers: authHeader }),
-            fetch('/api/bookings', { headers: authHeader }),
-            fetch('/api/leads', { headers: authHeader }),
-            fetch('/api/support-messages', { headers: authHeader })
+            fetch('/salons', { headers: authHeader }),
+            fetch('/bookings', { headers: authHeader }),
+            fetch('/leads', { headers: authHeader }),
+            fetch('/support-messages', { headers: authHeader })
         ]);
 
         if (sResp.ok) {

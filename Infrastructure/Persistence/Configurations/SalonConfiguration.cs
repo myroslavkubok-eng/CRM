@@ -2,6 +2,8 @@ using CRMKatia.Domain.Entities;
 using CRMKatia.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Text.Json;
 
 namespace CRMKatia.Infrastructure.Persistence.Configurations;
 
@@ -25,7 +27,18 @@ public class SalonConfiguration : IEntityTypeConfiguration<Salon>
         builder.Property(s => s.StripeSubscriptionId).HasMaxLength(200);
 
         builder.Property(s => s.Photos)
-            .HasColumnType("jsonb");
+            .HasColumnType("jsonb")
+            .HasConversion(
+                v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+                v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new List<string>()
+            )
+            .Metadata.SetValueComparer(
+                new ValueComparer<List<string>>(
+                    (c1, c2) => c1 != null && c2 != null && c1.SequenceEqual(c2),
+                    c => c == null ? 0 : c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                    c => c == null ? new List<string>() : c.ToList()
+                )
+            );
 
         builder.Property(s => s.Plan)
             .HasConversion<string>()

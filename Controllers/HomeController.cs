@@ -26,9 +26,9 @@ public class HomeController : Controller
     [HttpGet("/contact")]
     public IActionResult Contact() => View("~/Views/Contact/Index.cshtml");
 
-    [HttpGet("/salons")]
-    [HttpGet("/salon/listing")]
-    public IActionResult SalonListing() => View("~/Views/Salon/Listing.cshtml");
+[HttpGet("/salons/list")]
+[HttpGet("/salon/listing")]
+public IActionResult SalonListing() => View("~/Views/Salon/Listing.cshtml");
 
     [HttpGet("/salon/{id?}")]
     [HttpGet("/salon/profile/{id?}")]
@@ -74,6 +74,8 @@ public class HomeController : Controller
 
     // Catch-all: any unmatched route returns home (SPA handles it via hash)
     [HttpGet("/redirect")]
+    public IActionResult RedirectPage() => View("~/Views/Home/Redirect.cshtml");
+    
     [HttpGet("/dashboard")]
-    public IActionResult Redirect() => View("~/Views/Home/Index.cshtml");
+    public IActionResult Dashboard() => View("~/Views/Home/Index.cshtml");
 }

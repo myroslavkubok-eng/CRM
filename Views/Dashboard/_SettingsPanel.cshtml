@@ -1,0 +1,224 @@
+<div class="space-y-6">
+    <div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">⚙️ Settings</h1>
+        <p class="text-gray-600">Configure your salon preferences</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="border-b border-gray-200">
+        <nav class="-mb-px flex space-x-8">
+            <button onclick="switchSettingsTab('general')" class="settings-tab active px-4 py-2 border-b-2 border-purple-500 text-purple-600 font-medium">General</button>
+            <button onclick="switchSettingsTab('booking')" class="settings-tab px-4 py-2 border-b-2 border-transparent text-gray-600 hover:text-gray-900">Booking</button>
+            <button onclick="switchSettingsTab('notifications')" class="settings-tab px-4 py-2 border-b-2 border-transparent text-gray-600 hover:text-gray-900">Notifications</button>
+            <button onclick="switchSettingsTab('payments')" class="settings-tab px-4 py-2 border-b-2 border-transparent text-gray-600 hover:text-gray-900">Payments</button>
+            <button onclick="switchSettingsTab('integrations')" class="settings-tab px-4 py-2 border-b-2 border-transparent text-gray-600 hover:text-gray-900">Integrations</button>
+        </nav>
+    </div>
+
+    <!-- General Settings -->
+    <div id="settings-general" class="settings-content">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Salon Information</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Salon Name</label>
+                    <input type="text" id="settings-salon-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"/>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea id="settings-salon-description" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                        <input type="tel" id="settings-salon-phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"/>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="settings-salon-email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"/>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                    <input type="text" id="settings-salon-address" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"/>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Working Hours</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="time" id="settings-open-time" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"/>
+                        <input type="time" id="settings-close-time" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"/>
+                    </div>
+                </div>
+                <div class="pt-4">
+                    <button onclick="saveSettings()" class="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:opacity-90">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Settings -->
+    <div id="settings-booking" class="settings-content hidden">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Booking Preferences</h3>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-medium text-gray-900">Online Booking</p>
+                        <p class="text-sm text-gray-600">Allow clients to book online</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" checked class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-medium text-gray-900">Require Deposit</p>
+                        <p class="text-sm text-gray-600">Ask for deposit on booking</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-medium text-gray-900">Auto-confirm Bookings</p>
+                        <p class="text-sm text-gray-600">Automatically confirm new bookings</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" checked class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                    </label>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Cancellation Policy (hours)</label>
+                    <input type="number" value="24" class="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"/>
+                    <p class="text-xs text-gray-500 mt-1">Minimum notice required for cancellation</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Slot Duration (minutes)</label>
+                    <select class="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <option>15</option>
+                        <option selected>30</option>
+                        <option>45</option>
+                        <option>60</option>
+                    </select>
+                </div>
+                <div class="pt-4">
+                    <button onclick="saveBookingSettings()" class="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:opacity-90">Save Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Settings -->
+    <div id="settings-notifications" class="settings-content hidden">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Notification Preferences</h3>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-medium text-gray-900">Email Notifications</p>
+                        <p class="text-sm text-gray-600">Receive booking confirmations via email</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" checked class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-medium text-gray-900">SMS Notifications</p>
+                        <p class="text-sm text-gray-600">Send SMS reminders to clients</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-medium text-gray-900">Push Notifications</p>
+                        <p class="text-sm text-gray-600">Browser push notifications</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" checked class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                    </label>
+                </div>
+                <div class="pt-4">
+                    <button onclick="saveNotificationSettings()" class="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:opacity-90">Save Preferences</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payments Settings -->
+    <div id="settings-payments" class="settings-content hidden">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Payment Settings</h3>
+            <div class="text-center py-8">
+                <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m4 0h1m4 0h1M3 7h18M3 13h18"/></svg>
+                <p class="text-gray-500 mb-2">Payment configuration coming soon</p>
+                <p class="text-sm text-gray-400">Connect Stripe, PayPal, or other payment providers</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Integrations Settings -->
+    <div id="settings-integrations" class="settings-content hidden">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Third-party Integrations</h3>
+            <div class="text-center py-8">
+                <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
+                <p class="text-gray-500 mb-2">Integrations coming soon</p>
+                <p class="text-sm text-gray-400">Connect with calendars, CRM, and more</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function switchSettingsTab(tab) {
+    document.querySelectorAll('.settings-tab').forEach(t => {
+        t.classList.remove('active', 'border-purple-500', 'text-purple-600');
+        t.classList.add('border-transparent', 'text-gray-600');
+    });
+    document.querySelectorAll('.settings-content').forEach(c => c.classList.add('hidden'));
+    
+    const activeTab = document.querySelector(`[onclick="switchSettingsTab('${tab}')"]`);
+    activeTab.classList.add('active', 'border-purple-500', 'text-purple-600');
+    activeTab.classList.remove('border-transparent', 'text-gray-600');
+    
+    document.getElementById('settings-' + tab).classList.remove('hidden');
+}
+
+function saveSettings() {
+    alert('Settings saved successfully!');
+}
+
+function saveBookingSettings() {
+    alert('Booking settings saved!');
+}
+
+function saveNotificationSettings() {
+    alert('Notification preferences saved!');
+}
+
+// Load current settings
+if (salonId) {
+    const token = localStorage.getItem('auth_token') || '';
+    fetch('/salons/' + salonId, { headers: { 'Authorization': 'Bearer ' + token } })
+        .then(r => r.json())
+        .then(data => {
+            const salon = data.salon || data;
+            document.getElementById('settings-salon-name').value = salon.name || '';
+            document.getElementById('settings-salon-description').value = salon.description || '';
+            document.getElementById('settings-salon-phone').value = salon.phone || '';
+            document.getElementById('settings-salon-email').value = salon.email || '';
+            document.getElementById('settings-salon-address').value = salon.address || '';
+        })
+        .catch(err => console.error('Error loading settings:', err));
+}
+</script>

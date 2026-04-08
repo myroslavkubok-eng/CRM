@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRMKatia.Controllers;
 
 [ApiController]
-[Route("api/leads")]
+[Route("leads")]
 public class LeadsController : ControllerBase
 {
     private readonly ILeadRepository _leadRepository;

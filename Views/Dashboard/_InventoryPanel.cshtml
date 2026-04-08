@@ -1,0 +1,161 @@
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">📦 Inventory</h1>
+            <p class="text-gray-600">Track and manage stock levels</p>
+        </div>
+        <button onclick="openRestockModal()" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2.5 rounded-lg font-medium hover:opacity-90">
+            + Record Restock
+        </button>
+    </div>
+
+    <!-- Alerts -->
+    <div id="inventory-alerts" class="space-y-3"></div>
+
+    <!-- Stats -->
+    <div id="inventory-panel-stats" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Total Items</p>
+            <p class="text-2xl font-bold text-gray-900">—</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Low Stock</p>
+            <p class="text-2xl font-bold text-yellow-600">—</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Out of Stock</p>
+            <p class="text-2xl font-bold text-red-600">—</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Total Value</p>
+            <p class="text-2xl font-bold text-green-600">$—</p>
+        </div>
+    </div>
+
+    <!-- Inventory Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-4 border-b border-gray-100">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-gray-900">Inventory Items</h3>
+                <input type="text" placeholder="Search inventory..." class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"/>
+            </div>
+        </div>
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Product</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Category</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Stock</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Status</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Value</th>
+                    <th class="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="inventory-table-body" class="divide divide-gray-100">
+                <tr>
+                    <td colspan="6" class="text-center py-12 text-gray-400">Loading inventory...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+function loadInventory() {
+    const token = localStorage.getItem('auth_token') || '';
+    fetch('/products/salon/' + salonId, { headers: { 'Authorization': 'Bearer ' + token } })
+        .then(r => r.json())
+        .then(data => {
+            const items = data.products || data || [];
+            const tbody = document.getElementById('inventory-table-body');
+            const alertsContainer = document.getElementById('inventory-alerts');
+            
+            // Calculate stats
+            const totalItems = items.length;
+            const lowStock = items.filter(i => i.stock > 0 && i.stock < 10).length;
+            const outOfStock = items.filter(i => i.stock === 0).length;
+            const totalValue = items.reduce((sum, i) => sum + ((i.price || 0) * (i.stock || 0)), 0);
+            
+            // Update stats
+            const stats = document.querySelectorAll('#inventory-panel-stats p.text-2xl');
+            if (stats[0]) stats[0].textContent = totalItems;
+            if (stats[1]) stats[1].textContent = lowStock;
+            if (stats[2]) stats[2].textContent = outOfStock;
+            if (stats[3]) stats[3].textContent = '$' + totalValue.toFixed(2);
+            
+            // Generate alerts
+            let alertsHtml = '';
+            if (outOfStock > 0) {
+                alertsHtml += `
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            <div>
+                                <p class="font-medium text-red-800">${outOfStock} item${outOfStock !== 1 ? 's are' : ' is'} out of stock</p>
+                                <p class="text-sm text-red-600">Products need immediate attention</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            if (lowStock > 0) {
+                alertsHtml += `
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-yellow-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <div>
+                                <p class="font-medium text-yellow-800">${lowStock} item${lowStock !== 1 ? 's are' : ' is'} low in stock</p>
+                                <p class="text-sm text-yellow-600">Consider restocking soon</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            alertsContainer.innerHTML = alertsHtml;
+            
+            if (!items.length) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-12">
+                            <div class="text-gray-400">
+                                <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                                <p>No products in inventory</p>
+                                <p class="text-sm mt-2">Add products to track inventory</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = items.map(item => {
+                const statusColor = item.stock === 0 ? 'bg-red-100 text-red-700' : item.stock < 10 ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700';
+                const status = item.stock === 0 ? 'Out of Stock' : item.stock < 10 ? 'Low Stock' : 'In Stock';
+                return `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 font-medium">${item.name || 'Unnamed'}</td>
+                        <td class="px-6 py-4 text-gray-600">${item.category || '—'}</td>
+                        <td class="px-6 py-4 text-gray-600">${item.stock || 0}</td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs font-medium rounded-full ${statusColor}">${status}</span></td>
+                        <td class="px-6 py-4 text-gray-600">$${((item.price || 0) * (item.stock || 0)).toFixed(2)}</td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="editInventory('${item.id}')" class="text-purple-600 hover:text-purple-800">Edit</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        })
+        .catch(err => {
+            console.error('Error loading inventory:', err);
+            document.getElementById('inventory-table-body').innerHTML = '<tr><td colspan="6" class="text-center py-12 text-red-500">Error loading inventory</td></tr>';
+        });
+}
+
+function openRestockModal() {
+    alert('Restock feature coming soon!');
+}
+
+function editInventory(id) {
+    alert('Edit inventory coming soon!');
+}
+</script>

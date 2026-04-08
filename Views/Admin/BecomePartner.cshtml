@@ -262,7 +262,7 @@ document.getElementById('partner-form').addEventListener('submit', async functio
     errorEl.classList.add('hidden');
 
     try {
-        const resp = await fetch('/api/leads', {
+        const resp = await fetch('/leads', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

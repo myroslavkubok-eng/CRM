@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRMKatia.Controllers;
 
 [ApiController]
-[Route("api/support-messages")]
+[Route("support-messages")]
 public class SupportMessagesController : ControllerBase
 {
     private readonly ISupportMessageRepository _repository;

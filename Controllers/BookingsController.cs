@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRMKatia.Controllers;
 
 [ApiController]
-[Route("api/bookings")]
+[Route("bookings")]
 [Authorize]
 public class BookingsController : ControllerBase
 {

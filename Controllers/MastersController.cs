@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRMKatia.Controllers;
 
 [ApiController]
-[Route("api/masters")]
+[Route("masters")]
 [Authorize]
 public class MastersController : ControllerBase
 {

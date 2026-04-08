@@ -1,0 +1,101 @@
+<div class="space-y-6">
+    <div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">📥 Export Data</h1>
+        <p class="text-gray-600">Download and backup your data</p>
+    </div>
+
+    <!-- Export Options -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Export Clients -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            </div>
+            <h3 class="font-bold text-gray-900 mb-2">Client Database</h3>
+            <p class="text-sm text-gray-600 mb-4">Export all client information</p>
+            <div class="flex gap-2">
+                <button onclick="exportData('clients', 'csv')" class="flex-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">CSV</button>
+                <button onclick="exportData('clients', 'xlsx')" class="flex-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">Excel</button>
+                <button onclick="exportData('clients', 'json')" class="flex-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">JSON</button>
+            </div>
+        </div>
+
+        <!-- Export Bookings -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            </div>
+            <h3 class="font-bold text-gray-900 mb-2">Bookings History</h3>
+            <p class="text-sm text-gray-600 mb-4">Export all booking records</p>
+            <div class="flex gap-2">
+                <button onclick="exportData('bookings', 'csv')" class="flex-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">CSV</button>
+                <button onclick="exportData('bookings', 'xlsx')" class="flex-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">Excel</button>
+                <button onclick="exportData('bookings', 'json')" class="flex-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">JSON</button>
+            </div>
+        </div>
+
+        <!-- Export Services -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243z"/></svg>
+            </div>
+            <h3 class="font-bold text-gray-900 mb-2">Services</h3>
+            <p class="text-sm text-gray-600 mb-4">Export service catalog</p>
+            <div class="flex gap-2">
+                <button onclick="exportData('services', 'csv')" class="flex-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">CSV</button>
+                <button onclick="exportData('services', 'xlsx')" class="flex-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">Excel</button>
+                <button onclick="exportData('services', 'json')" class="flex-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">JSON</button>
+            </div>
+        </div>
+
+        <!-- Export Revenue -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4">
+                <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h3 class="font-bold text-gray-900 mb-2">Revenue Reports</h3>
+            <p class="text-sm text-gray-600 mb-4">Export financial data</p>
+            <div class="flex gap-2">
+                <button onclick="exportData('revenue', 'csv')" class="flex-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">CSV</button>
+                <button onclick="exportData('revenue', 'xlsx')" class="flex-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">Excel</button>
+                <button onclick="exportData('revenue', 'json')" class="flex-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">JSON</button>
+            </div>
+        </div>
+
+        <!-- Export Staff -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mb-4">
+                <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            </div>
+            <h3 class="font-bold text-gray-900 mb-2">Staff & Masters</h3>
+            <p class="text-sm text-gray-600 mb-4">Export team information</p>
+            <div class="flex gap-2">
+                <button onclick="exportData('staff', 'csv')" class="flex-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">CSV</button>
+                <button onclick="exportData('staff', 'xlsx')" class="flex-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">Excel</button>
+                <button onclick="exportData('staff', 'json')" class="flex-1 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">JSON</button>
+            </div>
+        </div>
+
+        <!-- Full Backup -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+            </div>
+            <h3 class="font-bold text-gray-900 mb-2">Full Backup</h3>
+            <p class="text-sm text-gray-600 mb-4">Complete data backup</p>
+            <button onclick="exportAll()" class="w-full px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:opacity-90">
+                Download All Data
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function exportData(type, format) {
+    alert(`Exporting ${type} data as ${format.toUpperCase()}... Feature coming soon!`);
+}
+
+function exportAll() {
+    alert('Full backup feature coming soon!');
+}
+</script>

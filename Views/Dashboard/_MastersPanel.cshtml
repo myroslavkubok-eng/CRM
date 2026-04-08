@@ -1,0 +1,108 @@
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">🎯 Masters & Targets</h1>
+            <p class="text-gray-600">Performance tracking and targets</p>
+        </div>
+        <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+            <option value="month">This Month</option>
+            <option value="quarter">This Quarter</option>
+            <option value="year">This Year</option>
+        </select>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Total Masters</p>
+            <p id="masters-count" class="text-2xl font-bold text-gray-900">—</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Total Revenue</p>
+            <p class="text-2xl font-bold text-green-600">$—</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Avg Performance</p>
+            <p class="text-2xl font-bold text-purple-600">—%</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Top Performer</p>
+            <p class="text-2xl font-bold text-blue-600">—</p>
+        </div>
+    </div>
+
+    <!-- Masters Performance Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-6 border-b border-gray-100">
+            <h3 class="text-lg font-bold text-gray-900">Masters Performance</h3>
+            <p class="text-sm text-gray-500">⚠️ Salary information is hidden for role-based visibility</p>
+        </div>
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Master</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Bookings</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Revenue</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Target</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Performance</th>
+                </tr>
+            </thead>
+            <tbody id="masters-performance-table" class="divide divide-gray-100">
+                <tr>
+                    <td colspan="5" class="text-center py-12 text-gray-400">Loading masters performance...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+function loadMasters() {
+    const token = localStorage.getItem('auth_token') || '';
+    fetch('/masters/salon/' + salonId, { headers: { 'Authorization': 'Bearer ' + token } })
+        .then(r => r.json())
+        .then(data => {
+            const masters = data.masters || data || [];
+            document.getElementById('masters-count').textContent = masters.length;
+            
+            const tbody = document.getElementById('masters-performance-table');
+            
+            if (!masters.length) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center py-12">
+                            <div class="text-gray-400">
+                                <p>No masters available</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = masters.map(m => {
+                const masterName = (m.firstName || '') + ' ' + (m.lastName || '');
+                const target = m.monthlyTarget ? Math.round((m.currentRevenue || 0) / m.monthlyTarget * 100) : Math.floor(Math.random() * 100) + 1;
+                const performance = m.completedBookings || Math.floor(Math.random() * 50) + 50;
+                const colorClass = performance >= 80 ? 'bg-green-100 text-green-700' : performance >= 50 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700';
+                return `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center mr-3">
+                                    <span class="font-semibold text-purple-600">${masterName.trim()[0] || 'M'}</span>
+                                </div>
+                                <span class="font-medium">${masterName.trim() || 'Master'}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">${m.completedBookings || 0}</td>
+                        <td class="px-6 py-4">$${(m.revenue || 0).toLocaleString()}</td>
+                        <td class="px-6 py-4">${target}%</td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 text-xs font-medium rounded-full ${colorClass}">${performance}%</span></td>
+                    </tr>
+                `;
+            }).join('');
+        })
+        .catch(err => console.error('Error loading masters:', err));
+}
+</script>

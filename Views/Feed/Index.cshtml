@@ -28,7 +28,22 @@
                 <a href="/" class="text-gray-600 hover:text-purple-600 transition-colors text-sm font-medium">Home</a>
                 <a href="/salon/listing" class="text-gray-600 hover:text-purple-600 transition-colors text-sm font-medium">Find Salons</a>
                 <a href="/pricing" class="text-gray-600 hover:text-purple-600 transition-colors text-sm font-medium">Pricing</a>
-                <a href="/auth" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">Sign In</a>
+                <div id="auth-buttons-feed" class="flex items-center gap-3">
+                    <a href="/auth" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">Sign In</a>
+                </div>
+                <div id="user-menu-feed" class="hidden relative">
+                    <button onclick="toggleUserMenuFeed(event)" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-purple-50 transition-colors">
+                        <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
+                            <span id="user-initial-feed" class="text-white font-bold text-sm">?</span>
+                        </div>
+                        <span id="user-name-feed" class="text-sm font-medium text-gray-700"></span>
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div id="user-dropdown-feed" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 z-50 py-1">
+                        <a id="dashboard-link-feed" href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50">My Dashboard</a>
+                        <button onclick="signOutFeed()" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Sign Out</button>
+                    </div>
+                </div>
             </nav>
         </div>
     </header>
@@ -207,10 +222,60 @@ function loadDemoPosts() {
     renderPosts(demoPosts);
 }
 
+async function checkAuthFeed() {
+    const token = localStorage.getItem('auth_token');
+    const userData = localStorage.getItem('user_data');
+    
+    if (!token || !userData) {
+        document.getElementById('auth-buttons-feed').classList.remove('hidden');
+        document.getElementById('user-menu-feed').classList.add('hidden');
+        return;
+    }
+    
+    try {
+        const user = JSON.parse(userData);
+        const resp = await fetch('/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
+        
+        if (resp.ok) {
+            document.getElementById('auth-buttons-feed').classList.add('hidden');
+            document.getElementById('user-menu-feed').classList.remove('hidden');
+            document.getElementById('user-initial-feed').textContent = (user.fullName || user.email || '?')[0].toUpperCase();
+            document.getElementById('user-name-feed').textContent = user.fullName || user.email || '';
+            
+            const role = user.role || 'Client';
+            const dashboards = { SuperAdmin: '/superadmin', Owner: '/owner', Admin: '/admin', Master: '/master',Client: '/client' };
+            document.getElementById('dashboard-link-feed').href = dashboards[role] || '/client';
+        } else {
+            document.getElementById('auth-buttons-feed').classList.remove('hidden');
+            document.getElementById('user-menu-feed').classList.add('hidden');
+        }
+    } catch (e) {
+        document.getElementById('auth-buttons-feed').classList.remove('hidden');
+        document.getElementById('user-menu-feed').classList.add('hidden');
+    }
+}
+
+function toggleUserMenuFeed(e) {
+    e?.stopPropagation();
+    document.getElementById('user-dropdown-feed').classList.toggle('hidden');
+}
+
+function signOutFeed() {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_data');
+    window.location.reload();
+}
+
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('#user-menu-feed')) {
+        document.getElementById('user-dropdown-feed')?.classList.add('hidden');
+    }
+});
+
 async function loadPosts() {
     try {
         const token = localStorage.getItem('auth_token') || '';
-        const resp = await fetch('/api/feed/posts', {
+        const resp = await fetch('/feed/posts', {
             headers: token ? { 'Authorization': 'Bearer ' + token } : {}
         });
         if (resp.ok) {
@@ -227,6 +292,7 @@ async function loadPosts() {
     renderPosts(demoPosts);
 }
 
+checkAuthFeed();
 loadPosts();
 </script>
 </body>

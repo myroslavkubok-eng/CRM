@@ -8,7 +8,7 @@ namespace CRMKatia.Controllers;
 /// Files are stored in wwwroot/uploads.
 /// </summary>
 [ApiController]
-[Route("api/storage")]
+[Route("storage")]
 public class StorageController : ControllerBase
 {
     private readonly IWebHostEnvironment _env;

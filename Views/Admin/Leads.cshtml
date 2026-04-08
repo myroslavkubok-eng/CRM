@@ -140,7 +140,7 @@ async function fetchLeads() {
 
     const token = localStorage.getItem('auth_token') || '';
     try {
-        const resp = await fetch('/api/leads', {
+        const resp = await fetch('/leads', {
             headers: token ? { 'Authorization': 'Bearer ' + token } : {}
         });
 
@@ -237,7 +237,7 @@ function renderLeads(leads) {
 async function updateStatus(leadId, status) {
     const token = localStorage.getItem('auth_token') || '';
     try {
-        await fetch('/api/leads/' + leadId + '/status', {
+        await fetch('/leads/' + leadId + '/status', {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -257,7 +257,7 @@ async function deleteLead(leadId) {
     if (!confirm('Delete this lead?')) return;
     const token = localStorage.getItem('auth_token') || '';
     try {
-        const resp = await fetch('/api/leads/' + leadId, {
+        const resp = await fetch('/leads/' + leadId, {
             method: 'DELETE',
             headers: token ? { 'Authorization': 'Bearer ' + token } : {}
         });

@@ -1,0 +1,78 @@
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">🎁 Gift Cards</h1>
+            <p class="text-gray-600">Manage gift card programs</p>
+        </div>
+        <button onclick="openGiftCardModal()" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2.5 rounded-lg font-medium hover:opacity-90">
+            + Create Gift Card
+        </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Active Gift Cards</p>
+            <p class="text-2xl font-bold text-purple-600">0</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Total Value Issued</p>
+            <p class="text-2xl font-bold text-green-600">$0</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Redeemed This Month</p>
+            <p class="text-2xl font-bold text-blue-600">$0</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Expiring Soon</p>
+            <p class="text-2xl font-bold text-yellow-600">0</p>
+        </div>
+    </div>
+
+    <!-- Gift Card Templates -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3 class="text-lg font-bold text-gray-900 mb-4">Gift Card Designs</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="aspect-[3/4] bg-gradient-to-br from-pink-100 to-red-100 rounded-xl flex items-center justify-center cursor-pointer hover:shadow-lg transition-shadow border-2 border-transparent hover:border-purple-500">
+                <div class="text-center">
+                    <div class="text-4xl mb-2">🎂</div>
+                    <p class="font-medium text-gray-700">Birthday</p>
+                </div>
+            </div>
+            <div class="aspect-[3/4] bg-gradient-to-br from-red-100 to-pink-100 rounded-xl flex items-center justify-center cursor-pointer hover:shadow-lg transition-shadow border-2 border-transparent hover:border-purple-500">
+                <div class="text-center">
+                    <div class="text-4xl mb-2">💕</div>
+                    <p class="font-medium text-gray-700">Valentine's</p>
+                </div>
+            </div>
+            <div class="aspect-[3/4] bg-gradient-to-br from-purple-100 to-indigo-100 rounded-xl flex items-center justify-center cursor-pointer hover:shadow-lg transition-shadow border-2 border-transparent hover:border-purple-500">
+                <div class="text-center">
+                    <div class="text-4xl mb-2">🎄</div>
+                    <p class="font-medium text-gray-700">Christmas</p>
+                </div>
+            </div>
+            <div class="aspect-[3/4] bg-gradient-to-br from-yellow-100 to-orange-100 rounded-xl flex items-center justify-center cursor-pointer hover:shadow-lg transition-shadow border-2 border-transparent hover:border-purple-500">
+                <div class="text-center">
+                    <div class="text-4xl mb-2">✨</div>
+                    <p class="font-medium text-gray-700">Generic</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Gift Cards -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-6 border-b border-gray-100">
+            <h3 class="text-lg font-bold text-gray-900">Recent Gift Cards</h3>
+        </div>
+        <div class="text-center py-12 text-gray-400">
+            <p>No gift cards issued yet</p>
+        </div>
+    </div>
+</div>
+
+<script>
+function openGiftCardModal() {
+    alert('Gift card creation coming soon!');
+}
+</script>

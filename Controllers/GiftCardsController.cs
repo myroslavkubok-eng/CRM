@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRMKatia.Controllers;
 
 [ApiController]
-[Route("api/giftcards")]
+[Route("giftcards")]
 [Authorize]
 public class GiftCardsController : ControllerBase
 {

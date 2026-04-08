@@ -1,0 +1,46 @@
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">📦 Package Deals</h1>
+            <p class="text-gray-600">Create and manage service packages</p>
+        </div>
+        <button onclick="openCreatePackageModal()" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2.5 rounded-lg font-medium hover:opacity-90">
+            + Create Package
+        </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Active Packages</p>
+            <p class="text-2xl font-bold text-purple-600">0</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">This Month Sales</p>
+            <p class="text-2xl font-bold text-green-600">$0</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Most Popular</p>
+            <p class="text-2xl font-bold text-gray-900">—</p>
+        </div>
+    </div>
+
+    <!-- Package List -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3 class="text-lg font-bold text-gray-900 mb-4">Your Packages</h3>
+        <div id="packages-list" class="text-center py-12 text-gray-400">
+            <svg class="w-20 h-20 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+            <p class="text-lg mb-2">No packages created yet</p>
+            <p class="text-sm">Create your first service package to offer bundled deals to clients</p>
+            <button onclick="openCreatePackageModal()" class="mt-4 px-6 py-2 bg-purple-100 text-purple-700 rounded-lg font-medium hover:bg-purple-200">
+                Create First Package
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openCreatePackageModal() {
+    alert('Package creation coming soon!');
+}
+</script>

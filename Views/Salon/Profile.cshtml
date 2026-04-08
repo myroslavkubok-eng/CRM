@@ -26,7 +26,21 @@
             </a>
             <nav class="hidden md:flex items-center gap-6">
                 <a href="/salon/listing" class="text-gray-600 hover:text-purple-600 transition-colors text-sm font-medium">Find Salons</a>
-                <a href="/auth" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">Sign In</a>
+                <div id="auth-buttons-profile">
+                    <a href="/auth" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">Sign In</a>
+                </div>
+                <div id="user-menu-profile" class="hidden relative">
+                    <button onclick="toggleUserMenu(event)" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
+                            <span id="user-initial-profile" class="text-white font-bold text-sm">?</span>
+                        </div>
+                        <span id="user-name-profile" class="text-sm font-medium text-gray-700 hidden md:inline"></span>
+                    </button>
+                    <div id="user-dropdown-profile" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 z-50 py-1">
+                        <a id="dashboard-link-profile" href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50">My Dashboard</a>
+                        <button onclick="signOutProfile()" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Sign Out</button>
+                    </div>
+                </div>
             </nav>
         </div>
     </header>
@@ -175,19 +189,97 @@
 <script>
 const pathParts = window.location.pathname.split('/');
 const salonId = pathParts[pathParts.length - 1];
-let isFav = false;
+letisFav = false;
+
+async function checkAuthProfile() {
+    const token = localStorage.getItem('auth_token');
+    const userData = localStorage.getItem('user_data');
+    
+    if (!token || !userData) {
+        document.getElementById('auth-buttons-profile').classList.remove('hidden');
+        document.getElementById('user-menu-profile').classList.add('hidden');
+        return;
+    }
+    
+    try {
+        const user = JSON.parse(userData);
+        const resp = await fetch('/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
+        
+        if (resp.ok) {
+            document.getElementById('auth-buttons-profile').classList.add('hidden');
+            document.getElementById('user-menu-profile').classList.remove('hidden');
+            document.getElementById('user-initial-profile').textContent = (user.fullName || user.email || '?')[0].toUpperCase();
+            document.getElementById('user-name-profile').textContent = user.fullName || user.email || '';
+            
+            const role = user.role || 'Client';
+            const dashboards = { SuperAdmin: '/superadmin', Owner: '/owner', Admin: '/admin', Master: '/master', Client: '/client' };
+            document.getElementById('dashboard-link-profile').href = dashboards[role] || '/client';
+        } else {
+            document.getElementById('auth-buttons-profile').classList.remove('hidden');
+            document.getElementById('user-menu-profile').classList.add('hidden');
+        }
+    } catch (e) {
+        document.getElementById('auth-buttons-profile').classList.remove('hidden');
+        document.getElementById('user-menu-profile').classList.add('hidden');
+    }
+}
+
+function toggleUserMenu(e) {
+    e?.stopPropagation();
+    document.getElementById('user-dropdown-profile').classList.toggle('hidden');
+}
+
+function signOutProfile() {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_data');
+    window.location.reload();
+}
+
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('#user-menu-profile')) {
+        document.getElementById('user-dropdown-profile')?.classList.add('hidden');
+    }
+});
 
 async function loadSalon() {
     try {
-        const resp = await fetch('/api/salons/' + salonId);
+        const resp = await fetch('/salons/' + salonId);
         if (!resp.ok) throw new Error();
         const data = await resp.json();
         const salon = data.salon || data;
         displaySalon(salon);
+        loadServices();
     } catch {
         document.getElementById('loading-state').classList.add('hidden');
         document.getElementById('error-state').classList.remove('hidden');
     }
+}
+
+async function loadServices() {
+    try {
+        const resp = await fetch('/services/salon/' + salonId);
+        if (!resp.ok) return;
+        const data = await resp.json();
+        const services = data.services || [];
+        const servicesList = document.getElementById('services-list');
+        if (services.length) {
+            servicesList.innerHTML = services.map(s => `
+                <div class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
+                    <div>
+                        <p class="font-medium text-gray-900">${s.name}</p>
+                        <p class="text-sm text-gray-500">${s.duration || 60} min</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold text-purple-600">$${s.price || 0}</p>
+                        <button onclick="window.location.href='/salon/booking/${salonId}'"
+                            class="text-xs text-purple-600 hover:underline">Book</button>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            servicesList.innerHTML = '<p class="text-gray-500 text-sm">No services listed yet.</p>';
+        }
+    } catch {}
 }
 
 function displaySalon(salon) {
@@ -196,13 +288,12 @@ function displaySalon(salon) {
     document.title = salon.name + ' - Katia Beauty Platform';
 
     document.getElementById('salon-name').textContent = salon.name;
-    document.getElementById('salon-rating').textContent = (salon.rating || 4.5).toFixed(1);
-    document.getElementById('salon-reviews').textContent = '(' + (salon.reviewCount || 0) + ' reviews)';
+    document.getElementById('salon-rating').textContent = 'New';
+    document.getElementById('salon-reviews').textContent = '(0 reviews)';
     document.getElementById('salon-address').textContent = salon.address || salon.city || 'Location not provided';
     document.getElementById('salon-description').textContent = salon.description || 'A premier beauty salon offering top-notch services.';
     document.getElementById('book-btn').href = '/salon/booking/' + salon.id;
 
-    if (salon.isOpenNow) document.getElementById('salon-open').classList.remove('hidden');
     if (salon.phone) {
         document.getElementById('salon-phone').textContent = salon.phone;
         document.getElementById('contact-phone').classList.remove('hidden');
@@ -211,29 +302,18 @@ function displaySalon(salon) {
         document.getElementById('salon-email').textContent = salon.email;
         document.getElementById('contact-email').classList.remove('hidden');
     }
-    if (salon.imageUrl) {
-        document.getElementById('gallery-container').innerHTML = '<img src="' + salon.imageUrl + '" class="w-full h-full object-cover" alt="' + salon.name + '" />';
-    }
-
-    // Services
-    const services = salon.services || [];
-    const servicesList = document.getElementById('services-list');
-    if (services.length) {
-        servicesList.innerHTML = services.map(s => `
-            <div class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
-                <div>
-                    <p class="font-medium text-gray-900">${s.name}</p>
-                    <p class="text-sm text-gray-500">${s.duration || 60} min</p>
-                </div>
-                <div class="text-right">
-                    <p class="font-bold text-purple-600">AED ${s.price || 0}</p>
-                    <button onclick="window.location.href='/salon/booking/${salon.id}'"
-                        class="text-xs text-purple-600 hover:underline">Book</button>
-                </div>
-            </div>
-        `).join('');
-    } else {
-        servicesList.innerHTML = '<p class="text-gray-500 text-sm">No services listed yet.</p>';
+    
+    const galleryContainer = document.getElementById('gallery-container');
+    if (salon.cover || salon.logo) {
+        const img = document.createElement('img');
+        img.src = salon.cover || salon.logo;
+        img.className = 'w-full h-full object-cover';
+        img.alt = salon.name;
+        img.onerror = function() {
+            galleryContainer.innerHTML = '<div class="w-full h-full flex items-center justify-center"><span class="text-8xl">✂️</span></div>';
+        };
+        galleryContainer.innerHTML = '';
+        galleryContainer.appendChild(img);
     }
 }
 
@@ -246,6 +326,7 @@ function toggleFavorite() {
 }
 
 if (salonId && salonId !== 'profile') {
+    checkAuthProfile();
     loadSalon();
 } else {
     document.getElementById('loading-state').classList.add('hidden');

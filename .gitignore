@@ -4,3 +4,6 @@ node_modules
 /.vs/CRMKatia.slnx
 /obj
 /bin/Debug/net9.0
+/.vs/CRMKatia
+/bin/Debug/net8.0
+/WebsiteOriginalConvert

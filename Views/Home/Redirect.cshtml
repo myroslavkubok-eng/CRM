@@ -1,0 +1,90 @@
+@{Layout = null;
+    ViewData["Title"] = "Redirecting...";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Katia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 flex items-center justify-center">
+    <div class="text-center">
+        <div class="w-16 h-16 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto mb-4"></div>
+        <p class="text-gray-600 text-lg">Loading your dashboard...</p>
+        <p class="text-gray-400 text-sm mt-2">Please wait while we set up your account</p>
+    </div>
+
+    <script>
+        async function init() {
+            const token = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+            const registrationType = localStorage.getItem('auth_registration_type') || 'client';if (!token || !userData) {
+                window.location.href = '/auth';
+                return;
+            }
+
+            try {
+                // Get user role from stored data
+                const user = JSON.parse(userData);
+                const role = user.role || 'Client';
+                
+                // Clear registration type after reading it
+                localStorage.removeItem('auth_registration_type');
+                
+                // For owners, check if they already have a salon
+                if (role === 'Owner') {
+                    try {
+                        const resp = await fetch('/salons/user/' + user.id, {
+                            headers: { 'Authorization': 'Bearer ' + token }
+                        });
+                        if (resp.ok) {
+                            const data = await resp.json();
+                            const salons = data.salons || data || [];
+                            if (salons.length > 0) {
+                                // Owner already has salon(s) - go to dashboard
+                                window.location.href = '/owner';
+                                return;
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Error checking salons:', e);
+                    }
+                    
+                    // No salon yet
+                    if (registrationType === 'salon') {
+                        window.location.href = '/become-partner';
+                    } else {
+                        window.location.href = '/owner';
+                    }
+                    return;
+                }
+                
+                // Redirect based on role for non-owners
+                switch (role) {
+                    case 'SuperAdmin':
+                        window.location.href = '/superadmin';
+                        break;
+                    case 'Admin':
+                        window.location.href = '/admin';
+                        break;
+                    case 'Master':
+                        window.location.href = '/master';
+                        break;
+                    case 'Client':
+                    default:
+                        window.location.href = '/client';
+                        break;
+                }
+            } catch (error) {
+                console.error('Error during redirect:', error);
+                window.location.href = '/client';
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

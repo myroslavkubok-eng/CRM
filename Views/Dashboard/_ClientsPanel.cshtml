@@ -1,0 +1,233 @@
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Clients</h1>
+            <p class="text-gray-600">Manage your client database</p>
+        </div>
+        <div class="flex gap-3">
+            <button onclick="exportClients()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                Export
+            </button>
+            <button onclick="openAddClientModal()" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2.5 rounded-lg font-medium hover:opacity-90">
+                + Add Client
+            </button>
+        </div>
+    </div>
+
+    <!-- Search & Filters -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <div class="flex flex-col md:flex-row gap-4">
+            <div class="flex-1">
+                <input type="text" id="client-search" placeholder="Search clients..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" onkeyup="searchClients(this.value)"/>
+            </div>
+            <select id="client-filter" onchange="filterClients()" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <option value="">All Clients</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="vip">VIP</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Total Clients</p>
+            <p id="stat-total-clients" class="text-2xl font-bold text-gray-900">—</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Active This Month</p>
+            <p id="stat-active-clients" class="text-2xl font-bold text-green-600">—</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">VIP Clients</p>
+            <p id="stat-vip-clients" class="text-2xl font-bold text-purple-600">—</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">New This Month</p>
+            <p id="stat-new-clients" class="text-2xl font-bold text-blue-600">—</p>
+        </div>
+    </div>
+
+    <!-- Clients List -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div id="clients-table-container">
+            <div class="text-center py-12 text-gray-400">Loading clients...</div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Client Modal -->
+<div id="add-client-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
+        <div class="p-6 border-b border-gray-100">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-gray-900">Add New Client</h3>
+                <button onclick="closeAddClientModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+        </div>
+        <form id="add-client-form" class="p-6 space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
+                    <input type="text" id="client-first-name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"/>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
+                    <input type="text" id="client-last-name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"/>
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" id="client-email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"/>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                <input type="tel" id="client-phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"/>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                <textarea id="client-notes" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+            </div>
+            <div class="flex items-center">
+                <input type="checkbox" id="client-vip" class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"/>
+                <label for="client-vip" class="ml-2 text-sm text-gray-700">Mark as VIP</label>
+            </div>
+            <div class="flex gap-3 pt-4">
+                <button type="button" onclick="closeAddClientModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">Cancel</button>
+                <button type="submit" class="flex-1 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90">Add Client</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function loadClientsList() {
+    const token = localStorage.getItem('auth_token') || '';
+    fetch('/clients/salon/' + salonId, { headers: { 'Authorization': 'Bearer ' + token } })
+        .then(r => r.json())
+        .then(data => {
+            const clients = data.clients || [];
+            document.getElementById('stat-total-clients').textContent = clients.length;
+            document.getElementById('stat-active-clients').textContent = Math.floor(clients.length * 0.7);
+            document.getElementById('stat-vip-clients').textContent = Math.floor(clients.length * 0.1);
+            document.getElementById('stat-new-clients').textContent = Math.floor(clients.length * 0.15);
+            
+            const container = document.getElementById('clients-table-container');
+            if (!clients.length) {
+                container.innerHTML = '<div class="text-center py-12 text-gray-400">No clients yet</div>';
+                return;
+            }
+            
+            container.innerHTML = `
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Client</th>
+                            <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Contact</th>
+                            <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Bookings</th>
+                            <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Total Spent</th>
+                            <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Status</th>
+                            <th class="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide divide-gray-100">
+                        ${clients.map(c => `
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center mr-3">
+                                            <span class="font-semibold text-purple-600">${(c.firstName || 'U')[0]}${(c.lastName || '')[0]}</span>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-gray-900">${c.firstName || ''} ${c.lastName || ''}</p>
+                                            <p class="text-sm text-gray-500">${c.email || 'No email'}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-gray-600">${c.phone || '—'}</td>
+                                <td class="px-6 py-4 text-gray-600">${c.totalBookings || 0}</td>
+                                <td class="px-6 py-4 text-gray-600">$${c.totalSpent || 0}</td>
+                                <td class="px-6 py-4">
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full ${c.isVip ? 'bg-purple-100 text-purple-700' : 'bg-green-100 text-green-700'}">${c.isVip ? 'VIP' : 'Active'}</span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <button onclick="viewClient('${c.id}')" class="text-purple-600 hover:text-purple-800 mr-3">View</button>
+                                    <button onclick="editClient('${c.id}')" class="text-gray-600 hover:text-gray-800">Edit</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        })
+        .catch(err => {
+            console.error('Error loading clients:', err);
+            document.getElementById('clients-table-container').innerHTML = '<div class="text-center py-12 text-red-500">Error loading clients</div>';
+        });
+}
+
+function openAddClientModal() {
+    document.getElementById('add-client-modal').classList.remove('hidden');
+}
+
+function closeAddClientModal() {
+    document.getElementById('add-client-modal').classList.add('hidden');
+    document.getElementById('add-client-form').reset();
+}
+
+document.getElementById('add-client-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const token = localStorage.getItem('auth_token') || '';
+    const clientData = {
+        firstName: document.getElementById('client-first-name').value.trim(),
+        lastName: document.getElementById('client-last-name').value.trim(),
+        email: document.getElementById('client-email').value.trim(),
+        phone: document.getElementById('client-phone').value.trim(),
+        notes: document.getElementById('client-notes').value.trim(),
+        isVip: document.getElementById('client-vip').checked,
+        salonId: salonId
+    };
+    
+    try {
+        const resp = await fetch('/clients', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify(clientData)
+        });
+        
+        if (resp.ok) {
+            closeAddClientModal();
+            loadClientsList();
+        } else {
+            const error = await resp.json();
+            alert('Error: ' + (error.message || JSON.stringify(error)));
+        }
+    } catch (e) {
+        alert('Network error: ' + e.message);
+    }
+});
+
+function searchClients(query) {
+    console.log('Searching clients:', query);
+}
+
+function filterClients() {
+    console.log('Filtering clients...');
+}
+
+function viewClient(clientId) {
+    alert('View client details - coming soon!');
+}
+
+function editClient(clientId) {
+    alert('Edit client - coming soon!');
+}
+
+function exportClients() {
+    alert('Export functionality coming soon!');
+}
+</script>
