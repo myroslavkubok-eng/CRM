@@ -1,0 +1,82 @@
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">💰 Expenses</h1>
+            <p class="text-gray-600">Track your financial expenses</p>
+        </div>
+        <button onclick="openAddExpenseModal()" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2.5 rounded-lg font-medium hover:opacity-90">
+            + Add Expense
+        </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">This Month</p>
+            <p class="text-2xl font-bold text-red-600">$—</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Last Month</p>
+            <p class="text-2xl font-bold text-gray-900">$—</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Rent/Utilities</p>
+            <p class="text-2xl font-bold text-blue-600">$—</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Supplies</p>
+            <p class="text-2xl font-bold text-green-600">$—</p>
+        </div>
+    </div>
+
+    <!-- Expense Categories -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 class="font-bold text-gray-900 mb-3">🔧 Equipment</h3>
+            <p class="text-3xl font-bold text-purple-600">$0</p>
+            <p class="text-sm text-gray-500 mt-1">This month</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 class="font-bold text-gray-900 mb-3">📦 Supplies</h3>
+            <p class="text-3xl font-bold text-blue-600">$0</p>
+            <p class="text-sm text-gray-500 mt-1">This month</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 class="font-bold text-gray-900 mb-3">💼 Salaries</h3>
+            <p class="text-3xl font-bold text-green-600">$0</p>
+            <p class="text-sm text-gray-500 mt-1">This month</p>
+        </div>
+    </div>
+
+    <!-- Recent Expenses -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-6 border-b border-gray-100">
+            <h3 class="text-lg font-bold text-gray-900">Recent Expenses</h3>
+        </div>
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Description</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Category</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Date</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Amount</th>
+                    <th class="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="expenses-table-body" class="divide divide-gray-100">
+                <tr>
+                    <td colspan="5" class="text-center py-12 text-gray-400">
+                        <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <p>No expenses recorded yet</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+function openAddExpenseModal() {
+    alert('Add expense feature coming soon!');
+}
+</script>

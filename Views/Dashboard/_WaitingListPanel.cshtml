@@ -1,0 +1,65 @@
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">⏰ Waiting List</h1>
+            <p class="text-gray-600">Manage reservation queue</p>
+        </div>
+        <button onclick="openAddWaitingModal()" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2.5 rounded-lg font-medium hover:opacity-90">
+            + Add to Waitlist
+        </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Current Waitlist</p>
+            <p class="text-2xl font-bold text-purple-600">—</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Avg. Wait Time</p>
+            <p class="text-2xl font-bold text-blue-600">— min</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Today Served</p>
+            <p class="text-2xl font-bold text-green-600">—</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <p class="text-sm text-gray-500 mb-1">Converted</p>
+            <p class="text-2xl font-bold text-yellow-600">—%</p>
+        </div>
+    </div>
+
+    <!-- Waiting List Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-6 border-b border-gray-100">
+            <h3 class="text-lg font-bold text-gray-900">Current Queue</h3>
+        </div>
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">#</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Client</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Service</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Master</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Wait Time</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Status</th>
+                    <th class="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="waiting-list-body" class="divide divide-gray-100">
+                <tr>
+                    <td colspan="7" class="text-center py-12 text-gray-400">
+                        <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l0 0m0 0l0 0m0 0l0 0m0 0l0 0m0 0l0 0m0 0V8m0 4h.01M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        <p>No clients on the waiting list</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+function openAddWaitingModal() {
+    alert('Add to waitlist feature coming soon!');
+}
+</script>

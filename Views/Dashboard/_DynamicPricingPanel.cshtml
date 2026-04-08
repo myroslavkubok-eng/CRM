@@ -1,0 +1,102 @@
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">💰 Dynamic Pricing</h1>
+            <p class="text-gray-600">Adjust prices based on demand and time</p>
+        </div>
+        <button onclick="savePricing()" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2.5 rounded-lg font-medium hover:opacity-90">
+            Save Changes
+        </button>
+    </div>
+
+    <!-- Pricing Rules -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Time-based Pricing -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">⏰ Time-Based Pricing</h3>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between p-4 bg-purple-50 rounded-lg">
+                    <div>
+                        <p class="font-medium text-gray-900">Peak Hours (12pm - 6pm)</p>
+                        <p class="text-sm text-gray-600">Increase prices by</p>
+                    </div>
+                    <input type="number" value="20" class="w-20 px-3 py-2 border border-gray-300 rounded-lg text-center" />
+                    <span class="text-gray-600">%</span>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
+                    <div>
+                        <p class="font-medium text-gray-900">Morning Discount (8am - 11am)</p>
+                        <p class="text-sm text-gray-600">Decrease prices by</p>
+                    </div>
+                    <input type="number" value="10" class="w-20 px-3 py-2 border border-gray-300 rounded-lg text-center" />
+                    <span class="text-gray-600">%</span>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                    <div>
+                        <p class="font-medium text-gray-900">Evening Special (7pm - 9pm)</p>
+                        <p class="text-sm text-gray-600">Decrease prices by</p>
+                    </div>
+                    <input type="number" value="15" class="w-20 px-3 py-2 border border-gray-300 rounded-lg text-center" />
+                    <span class="text-gray-600">%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day-based Pricing -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">📅 Day-Based Pricing</h3>
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-700">Monday - Thursday</span>
+                    <span class="font-medium">Standard Rate</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-700">Friday</span>
+                    <input type="number" value="10" class="w-20 px-3 py-2 border border-gray-300 rounded-lg text-center" />
+                    <span class="text-gray-600">% increase</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-700">Saturday</span>
+                    <input type="number" value="25" class="w-20 px-3 py-2 border border-gray-300 rounded-lg text-center" />
+                    <span class="text-gray-600">% increase</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-700">Sunday</span>
+                    <input type="number" value="30" class="w-20 px-3 py-2 border border-gray-300 rounded-lg text-center" />
+                    <span class="text-gray-600">% increase</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demand-Based Pricing -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 lg:col-span-2">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">📈 Demand-Based Pricing</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-medium text-gray-900">Enable Auto-pricing</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                        </label>
+                    </div>
+                    <p class="text-sm text-gray-600">Automatically adjust prices based on booking demand</p>
+                </div>
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-medium text-gray-900">Max Price Increase</span>
+                        <input type="number" value="50" class="w-20 px-3 py-2 border border-gray-300 rounded-lg text-center" />
+                        <span class="text-gray-600">%</span>
+                    </div>
+                    <p class="text-sm text-gray-600">Maximum price increase for high-demand periods</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function savePicing() {
+    alert('Dynamic pricing settings saved!');
+}
+</script>

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRMKatia.Controllers;
 
 [ApiController]
-[Route("api/feed")]
+[Route("feed")]
 public class FeedController : ControllerBase
 {
     private readonly IFeedRepository _feedRepository;

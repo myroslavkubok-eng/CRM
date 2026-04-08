@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRMKatia.Controllers;
 
 [ApiController]
-[Route("api/invitations")]
+[Route("invitations")]
 public class InvitationsController : ControllerBase
 {
     private readonly IInvitationRepository _invitationRepository;

@@ -3,6 +3,7 @@ using CRMKatia.Application.Services;
 using CRMKatia.Domain.Entities;
 using CRMKatia.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace CRMKatia.Application.Commands.Handlers;
 
@@ -34,18 +35,25 @@ public class RegisterUserHandler : ICommandHandler<RegisterUserCommand, AuthComm
 {
     private readonly UserManager<User> _userManager;
     private readonly IJwtTokenService _jwtTokenService;
+    private readonly ILogger<RegisterUserHandler> _logger;
 
-    public RegisterUserHandler(UserManager<User> userManager, IJwtTokenService jwtTokenService)
+    public RegisterUserHandler(UserManager<User> userManager, IJwtTokenService jwtTokenService, ILogger<RegisterUserHandler> logger)
     {
         _userManager = userManager;
         _jwtTokenService = jwtTokenService;
+        _logger = logger;
     }
 
     public async Task<AuthCommandResult> HandleAsync(RegisterUserCommand command)
     {
+        _logger.LogInformation("Registration attempt for email: {Email}, role: {Role}", command.Email, command.Role);
+
         var existingUser = await _userManager.FindByEmailAsync(command.Email);
         if (existingUser is not null)
+        {
+            _logger.LogWarning("User already exists with email: {Email}", command.Email);
             return AuthCommandResult.Fail("A user with this email already exists.");
+        }
 
         var user = new User
         {
@@ -59,17 +67,28 @@ public class RegisterUserHandler : ICommandHandler<RegisterUserCommand, AuthComm
             CreatedAt = DateTime.UtcNow
         };
 
+        _logger.LogInformation("Creating user with email: {Email}", command.Email);
         var result = await _userManager.CreateAsync(user, command.Password);
 
         if (!result.Succeeded)
         {
             var errors = string.Join("; ", result.Errors.Select(e => e.Description));
+            _logger.LogError("User creation failed for {Email}. Errors: {Errors}", command.Email, errors);
             return AuthCommandResult.Fail($"Registration failed: {errors}");
         }
 
+        _logger.LogInformation("User created successfully: {UserId}. Assigning role: {Role}", user.Id, command.Role);
         var roleName = command.Role.ToString();
-        await _userManager.AddToRoleAsync(user, roleName);
+        var roleResult = await _userManager.AddToRoleAsync(user, roleName);
+        
+        if (!roleResult.Succeeded)
+        {
+            var errors = string.Join("; ", roleResult.Errors.Select(e => e.Description));
+            _logger.LogError("Role assignment failed for user {UserId}. Errors: {Errors}", user.Id, errors);
+            return AuthCommandResult.Fail($"User created but role assignment failed: {errors}");
+        }
 
+        _logger.LogInformation("Role assigned successfully for user: {UserId}", user.Id);
         var roles = await _userManager.GetRolesAsync(user);
         var token = _jwtTokenService.GenerateToken(user, roles);
 

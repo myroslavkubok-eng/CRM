@@ -210,7 +210,7 @@ document.getElementById('contact-form').addEventListener('submit', async functio
 
     const token = localStorage.getItem('auth_token') || '';
     try {
-        const resp = await fetch('/api/support-messages', {
+        const resp = await fetch('/support-messages', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -2,607 +2,677 @@
     ViewData["Title"] = "Katia Booking - Beauty & Wellness Marketplace";
 }
 
-<!-- Header -->
-<header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
-    <div class="container mx-auto px-4 py-3">
-        <div class="flex items-center justify-between">
-            <a href="/" class="flex items-center gap-2">
-                <img src="/icons/logo.svg" alt="Katia Booking" class="w-10 h-10 rounded-xl" onerror="this.style.background='linear-gradient(135deg,#9333ea,#ec4899)';this.style.display='flex'" />
-                <span class="text-xl font-bold text-gray-900 hidden sm:inline">Katia Booking</span>
-            </a>
-
-            <nav class="hidden md:flex items-center gap-6">
-                <a href="/Salon/Listing" class="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-                    <span>Browse by Category</span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    @* Tailwind CDN for Razor views (compiled CSS may not include all classes) *@
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <a href="/" class="flex items-center gap-2">
+                    <img src="/icons/logo.svg" alt="Katia Booking" class="w-10 h-10 rounded-xl" onerror="this.style.background='linear-gradient(135deg,#9333ea,#ec4899)';this.style.display='flex'" />
+                    <span class="text-xl font-bold text-gray-900 hidden sm:inline">Katia Booking</span>
                 </a>
-                <a href="/Admin/BecomePartner" class="flex items-center gap-2 text-sm font-medium text-purple-600 hover:text-purple-700 transition-colors">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
-                    <span>Become a Partner</span>
-                </a>
-                <a href="/Contact" class="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                    <span>Support</span>
-                </a>
-            </nav>
 
-            <div class="flex items-center gap-3">
-                <div class="relative">
-                    <button onclick="toggleSignIn(event)" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-md text-sm font-medium transition-all">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-                        <span class="hidden sm:inline">Sign In</span>
-                    </button>
-                    <div id="signinDropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 z-50 py-1">
-                        <p class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">Choose Login Type</p>
-                        <a href="/Auth?type=client" class="flex items-center gap-3 px-4 py-2 hover:bg-purple-50 transition-colors">
-                            <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            <div>
-                                <div class="text-sm font-medium text-gray-900">Sign in as Client</div>
-                                <div class="text-xs text-gray-500">Book appointments</div>
-                            </div>
-                        </a>
-                        <a href="/Auth?type=salon" class="flex items-center gap-3 px-4 py-2 hover:bg-purple-50 transition-colors">
-                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
-                            <div>
-                                <div class="text-sm font-medium text-gray-900">Sign in as Salon</div>
-                                <div class="text-xs text-gray-500">Manage your business</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
-<!-- Hero Section -->
-<div class="bg-gradient-to-b from-purple-50 via-pink-50 to-white py-16 md:py-24">
-    <div class="container mx-auto px-3 md:px-4">
-        <div class="max-w-4xl mx-auto text-center mb-6">
-            <div class="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-full mb-6">
-                <svg class="w-4 h-4 text-purple-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
-                <span class="text-sm text-purple-600 font-medium">Your Premier Luxury Beauty Platform</span>
-            </div>
-        </div>
-
-        <div class="max-w-4xl mx-auto text-center mb-8">
-            <h1 class="text-4xl md:text-6xl font-bold mb-4">
-                <span class="text-gray-900">Welcome to</span>
-                <br>
-                <span class="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Katia Booking</span>
-            </h1>
-            <p class="text-lg md:text-xl text-purple-600 mb-8">Discover and book the finest beauty salons</p>
-
-            <div class="flex justify-center gap-4 md:gap-8 mb-12">
-                <div class="bg-white rounded-2xl px-6 py-4 shadow-sm">
-                    <div class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">12+</div>
-                    <div class="text-xs md:text-sm text-gray-600">Salons</div>
-                </div>
-                <div class="bg-white rounded-2xl px-6 py-4 shadow-sm">
-                    <div class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">50K+</div>
-                    <div class="text-xs md:text-sm text-gray-600">Clients</div>
-                </div>
-                <div class="bg-white rounded-2xl px-6 py-4 shadow-sm">
-                    <div class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">4.8&#9733;</div>
-                    <div class="text-xs md:text-sm text-gray-600">Rating</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Smart Search Box -->
-        <div class="max-w-5xl mx-auto">
-            <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8">
-                <div class="flex items-center gap-2 mb-6">
-                    <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
-                    <span class="text-sm font-medium text-purple-600">Smart Search</span>
-                    <a href="#" class="ml-auto flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full hover:from-purple-700 hover:to-pink-700 transition-all hover:shadow-lg cursor-pointer">
-                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
-                        <span class="text-xs font-medium text-white">AI Katia</span>
+                <nav class="hidden md:flex items-center gap-6">
+                    <a href="/Salon/Listing" class="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        <span>Browse by Category</span>
                     </a>
-                </div>
+                    <a href="/Admin/BecomePartner" class="flex items-center gap-2 text-sm font-medium text-purple-600 hover:text-purple-700 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+                        <span>Become a Partner</span>
+                    </a>
+                    <a href="/Contact" class="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        <span>Support</span>
+                    </a>
+                </nav>
 
-                <div class="mb-4">
-                    <div class="relative">
-                        <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                        <input type="text" id="searchQuery" placeholder="Search services, salons..." class="w-full pl-12 h-14 text-base rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent px-4" />
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <select id="countrySelect" onchange="updateCities()" class="h-12 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white">
-                        <option value="">Country</option>
-                        <option value="uae">&#127462;&#127466; UAE</option>
-                        <option value="usa">&#127482;&#127480; USA</option>
-                        <option value="uk">&#127468;&#127463; UK</option>
-                        <option value="russia">&#127479;&#127482; Russia</option>
-                        <option value="france">&#127467;&#127479; France</option>
-                        <option value="germany">&#127465;&#127466; Germany</option>
-                        <option value="italy">&#127470;&#127481; Italy</option>
-                        <option value="spain">&#127466;&#127480; Spain</option>
-                        <option value="turkey">&#127481;&#127479; Turkey</option>
-                        <option value="australia">&#127462;&#127482; Australia</option>
-                    </select>
-
-                    <select id="citySelect" class="h-12 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white">
-                        <option value="">City</option>
-                    </select>
-
-                    <select id="areaSelect" class="h-12 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white">
-                        <option value="">Area</option>
-                        <option>Downtown</option>
-                        <option>Marina</option>
-                        <option>City Center</option>
-                        <option>Suburbs</option>
-                    </select>
-
-                    <select id="categorySelect" class="h-12 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white">
-                        <option value="">Category</option>
-                        <option value="manicure">Manicure</option>
-                        <option value="pedicure">Pedicure</option>
-                        <option value="eyelashes">Eyelashes</option>
-                        <option value="brow">Brow</option>
-                        <option value="barber">Barber</option>
-                        <option value="cosmetology">Cosmetology</option>
-                        <option value="laser">Laser</option>
-                        <option value="makeup">Make up</option>
-                        <option value="hairstylist">Hair Stylist</option>
-                        <option value="tattoo">Tattoo</option>
-                        <option value="piercing">Piercing</option>
-                        <option value="spa">Spa</option>
-                        <option value="massage">Massage</option>
-                        <option value="waxing">Waxing</option>
-                        <option value="facial">Facial</option>
-                        <option value="fitness">Fitness</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-
-                <button onclick="doSearch()" class="inline-flex items-center mt-4 h-12 px-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-medium transition-all">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    Search
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="container mx-auto px-4">
-
-    <!-- Featured Salons -->
-    <section class="py-12 md:py-16">
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h2 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent flex items-center gap-2">
-                    <svg class="w-8 h-8 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    Premium Salons
-                </h2>
-                <p class="text-gray-600 text-sm mt-1">Luxury experiences with exclusive services</p>
-            </div>
-            <a href="/Salon/Listing" class="hidden md:inline-flex items-center px-4 py-2 border border-gray-200 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">View All</a>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            <!-- Card 1 -->
-            <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
-                <div class="relative h-48">
-                    <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&q=80" alt="Beauty Haven Dubai" class="w-full h-full object-cover" />
-                    <div class="absolute top-3 left-3"><span class="bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full">Premium</span></div>
-                    <button class="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform">
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                    </button>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-900 mb-1">Beauty Haven Dubai</h3>
-                    <p class="text-xs text-gray-500 mb-2 flex items-center gap-1">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        Downtown Dubai &bull; 1.2 km
-                    </p>
-                    <div class="flex items-center gap-1 mb-3">
-                        <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                        <span class="text-sm font-semibold">4.9</span>
-                        <span class="text-xs text-gray-500">(248 reviews)</span>
-                    </div>
-                    <div class="flex flex-wrap gap-1 mb-3">
-                        <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">Manicure</span>
-                        <span class="text-xs bg-pink-100 text-pink-700 px-2 py-0.5 rounded-full">Spa</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm font-semibold text-purple-600">from AED 150</span>
-                        <a href="/Salon/Booking" class="text-xs bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1.5 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all">Book Now</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
-                <div class="relative h-48">
-                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&q=80" alt="Glamour Studio" class="w-full h-full object-cover" />
-                    <div class="absolute top-3 left-3"><span class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">Open Now</span></div>
-                    <button class="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform">
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                    </button>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-900 mb-1">Glamour Studio</h3>
-                    <p class="text-xs text-gray-500 mb-2 flex items-center gap-1">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        Dubai Marina &bull; 2.1 km
-                    </p>
-                    <div class="flex items-center gap-1 mb-3">
-                        <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                        <span class="text-sm font-semibold">4.7</span>
-                        <span class="text-xs text-gray-500">(183 reviews)</span>
-                    </div>
-                    <div class="flex flex-wrap gap-1 mb-3">
-                        <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">Hair Styling</span>
-                        <span class="text-xs bg-pink-100 text-pink-700 px-2 py-0.5 rounded-full">Makeup</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm font-semibold text-purple-600">from AED 200</span>
-                        <a href="/Salon/Booking" class="text-xs bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1.5 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all">Book Now</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
-                <div class="relative h-48">
-                    <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&q=80" alt="Nail Art Paradise" class="w-full h-full object-cover" />
-                    <div class="absolute top-3 left-3"><span class="bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded-full">New</span></div>
-                    <button class="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform">
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                    </button>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-900 mb-1">Nail Art Paradise</h3>
-                    <p class="text-xs text-gray-500 mb-2 flex items-center gap-1">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        Business Bay &bull; 0.8 km
-                    </p>
-                    <div class="flex items-center gap-1 mb-3">
-                        <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                        <span class="text-sm font-semibold">4.8</span>
-                        <span class="text-xs text-gray-500">(94 reviews)</span>
-                    </div>
-                    <div class="flex flex-wrap gap-1 mb-3">
-                        <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">Manicure</span>
-                        <span class="text-xs bg-pink-100 text-pink-700 px-2 py-0.5 rounded-full">Pedicure</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm font-semibold text-purple-600">from AED 80</span>
-                        <a href="/Salon/Booking" class="text-xs bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1.5 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all">Book Now</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
-                <div class="relative h-48">
-                    <img src="https://images.unsplash.com/photo-1487412947147-5cebf100d6a6?w=400&q=80" alt="The Spa Lounge" class="w-full h-full object-cover" />
-                    <div class="absolute top-3 left-3"><span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">Top Rated</span></div>
-                    <button class="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform">
-                        <svg class="w-4 h-4 text-pink-500 fill-pink-500" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                    </button>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-900 mb-1">The Spa Lounge</h3>
-                    <p class="text-xs text-gray-500 mb-2 flex items-center gap-1">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        Jumeirah &bull; 3.0 km
-                    </p>
-                    <div class="flex items-center gap-1 mb-3">
-                        <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                        <span class="text-sm font-semibold">5.0</span>
-                        <span class="text-xs text-gray-500">(312 reviews)</span>
-                    </div>
-                    <div class="flex flex-wrap gap-1 mb-3">
-                        <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">Spa</span>
-                        <span class="text-xs bg-pink-100 text-pink-700 px-2 py-0.5 rounded-full">Massage</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm font-semibold text-purple-600">from AED 350</span>
-                        <a href="/Salon/Booking" class="text-xs bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1.5 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all">Book Now</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="text-center mt-8">
-            <a href="/Salon/Listing" class="inline-flex items-center px-6 py-3 border-2 border-purple-200 text-purple-600 rounded-xl hover:bg-purple-50 font-medium transition-colors">
-                View All Salons &rarr;
-            </a>
-        </div>
-    </section>
-
-    <!-- Why Choose Katia -->
-    <section class="py-12 md:py-16 bg-gradient-to-b from-white to-purple-50 -mx-4 px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">Why Choose Katia Booking</h2>
-            <p class="text-gray-600">Experience the future of beauty booking</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow p-8 text-center">
-                <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                </div>
-                <h3 class="text-lg font-bold text-purple-600 mb-2">Instant Booking</h3>
-                <p class="text-sm text-gray-600">Book 24/7 with real-time confirmation</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow p-8 text-center">
-                <div class="w-16 h-16 bg-pink-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                </div>
-                <h3 class="text-lg font-bold text-pink-600 mb-2">Verified Reviews</h3>
-                <p class="text-sm text-gray-600">Real reviews you can trust</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow p-8 text-center">
-                <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                </div>
-                <h3 class="text-lg font-bold text-purple-600 mb-2">Best Locations</h3>
-                <p class="text-sm text-gray-600">Premium salons near you</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow p-8 text-center">
-                <div class="w-16 h-16 bg-pink-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                </div>
-                <h3 class="text-lg font-bold text-pink-600 mb-2">Save Favorites</h3>
-                <p class="text-sm text-gray-600">Never lose your favorites</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Trusted by Thousands -->
-    <section class="py-12 md:py-16">
-        <div class="text-center mb-12">
-            <h2 class="text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">Trusted by Thousands</h2>
-            <p class="text-gray-600">Join our growing community of beauty enthusiasts and salon partners</p>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-12">
-            <div class="text-center">
-                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                </div>
-                <div id="clientsCount" class="text-3xl font-bold text-gray-900 mb-1">10,000+</div>
-                <div class="text-sm text-gray-600">Happy Clients</div>
-            </div>
-            <div class="text-center">
-                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
-                </div>
-                <div id="salonsCount" class="text-3xl font-bold text-gray-900 mb-1">500+</div>
-                <div class="text-sm text-gray-600">Partner Salons</div>
-            </div>
-            <div class="text-center">
-                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-                </div>
-                <div id="bookingsCount" class="text-3xl font-bold text-gray-900 mb-1">10,000+</div>
-                <div class="text-sm text-gray-600">Successful Bookings</div>
-            </div>
-            <div class="text-center">
-                <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                </div>
-                <div class="text-3xl font-bold text-gray-900 mb-1">4.8<span class="text-yellow-500">/5</span></div>
-                <div class="text-sm text-gray-600">Average Rating</div>
-            </div>
-        </div>
-        <div class="flex flex-wrap justify-center gap-8 text-sm text-gray-500 mb-4">
-            <div class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                <span>Premium Quality</span>
-            </div>
-            <div class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <span>Secure Booking</span>
-            </div>
-            <div class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                <span>Instant Confirmation</span>
-            </div>
-            <div class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                <span>Best Prices</span>
-            </div>
-        </div>
-        <div class="text-center text-sm text-gray-500">Trusted by leading beauty brands globally</div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="py-12 md:py-16 bg-gradient-to-b from-white to-purple-50 -mx-4 px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">What Our Clients Say</h2>
-            <p class="text-gray-600">Join thousands of satisfied customers who trust Katia for their beauty needs</p>
-        </div>
-
-        <div class="max-w-4xl mx-auto relative mb-12">
-            <div class="bg-white rounded-3xl shadow-xl p-8 md:p-12 relative overflow-hidden">
-                <div class="absolute top-8 right-8 text-purple-200 text-8xl font-serif leading-none select-none">&ldquo;</div>
-
-                <div id="testimonialContent">
-                    <div class="flex items-start gap-4 mb-6">
-                        <div id="tAvatar" class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold flex-shrink-0">OC</div>
-                        <div>
-                            <h4 id="tName" class="font-bold text-gray-900">Olivia Chen</h4>
-                            <div class="flex gap-1 mt-1">
-                                <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <div class="flex items-center gap-3">
+                    <div id="auth-buttons-home">
+                        <div class="relative">
+                            <button onclick="toggleSignIn(event)" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-md text-sm font-medium transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                                <span class="hidden sm:inline">Sign In</span>
+                            </button>
+                            <div id="signinDropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 z-50 py-1">
+                                <p class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">Choose Login Type</p>
+                                <a href="/Auth?type=client" class="flex items-center gap-3 px-4 py-2 hover:bg-purple-50 transition-colors">
+                                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                    <div>
+                                        <div class="text-sm font-medium text-gray-900">Sign in as Client</div>
+                                        <div class="text-xs text-gray-500">Book appointments</div>
+                                    </div>
+                                </a>
+                                <a href="/Auth?type=salon" class="flex items-center gap-3 px-4 py-2 hover:bg-purple-50 transition-colors">
+                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+                                    <div>
+                                        <div class="text-sm font-medium text-gray-900">Sign in as Salon</div>
+                                        <div class="text-xs text-gray-500">Manage your business</div>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>
-                    <p id="tText" class="text-gray-700 italic mb-6 text-lg leading-relaxed">
-                        "The variety of salons and services is incredible! I found the perfect place for my wedding makeup. The reviews helped me make the right choice. Thank you Katia!"
-                    </p>
-                    <div id="tInfo" class="flex flex-wrap gap-2 text-sm text-gray-500">
-                        <span>Bridal Makeup</span><span>&bull;</span><span>Beauty Haven</span><span>&bull;</span><span>Dubai, UAE</span><span>&bull;</span><span>1 week ago</span>
+                    <div id="user-menu-home" class="hidden relative">
+                        <button onclick="toggleUserMenuHome(event)" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-purple-50 transition-colors">
+                            <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
+                                <span id="user-initial-home" class="text-white font-bold text-sm">?</span>
+                            </div>
+                            <span id="user-name-home" class="text-sm font-medium text-gray-700 hidden sm:inline"></span>
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div id="user-dropdown-home" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 z-50 py-1">
+                            <a id="dashboard-link-home" href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50">My Dashboard</a>
+                            <button onclick="signOutHome()" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Sign Out</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-b from-purple-50 via-pink-50 to-white py-16 md:py-24">
+        <div class="container mx-auto px-3 md:px-4">
+            <div class="max-w-4xl mx-auto text-center mb-6">
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-full mb-6">
+                    <svg class="w-4 h-4 text-purple-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+                    <span class="text-sm text-purple-600 font-medium">Your Premier Luxury Beauty Platform</span>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto text-center mb-8">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4">
+                    <span class="text-gray-900">Welcome to</span>
+                    <br>
+                    <span class="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Katia Booking</span>
+                </h1>
+                <p class="text-lg md:text-xl text-purple-600 mb-8">Discover and book the finest beauty salons</p>
+
+                <div class="flex justify-center gap-4 md:gap-8 mb-12">
+                    <div class="bg-white rounded-2xl px-6 py-4 shadow-sm">
+                        <div class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">12+</div>
+                        <div class="text-xs md:text-sm text-gray-600">Salons</div>
+                    </div>
+                    <div class="bg-white rounded-2xl px-6 py-4 shadow-sm">
+                        <div class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">50K+</div>
+                        <div class="text-xs md:text-sm text-gray-600">Clients</div>
+                    </div>
+                    <div class="bg-white rounded-2xl px-6 py-4 shadow-sm">
+                        <div class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">4.8&#9733;</div>
+                        <div class="text-xs md:text-sm text-gray-600">Rating</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Smart Search Box -->
+            <div class="max-w-5xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8">
+                    <div class="flex items-center gap-2 mb-6">
+                        <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+                        <span class="text-sm font-medium text-purple-600">Smart Search</span>
+                        <a href="#" class="ml-auto flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full hover:from-purple-700 hover:to-pink-700 transition-all hover:shadow-lg cursor-pointer">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+                            <span class="text-xs font-medium text-white">AI Katia</span>
+                        </a>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="relative">
+                            <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            <input type="text" id="searchQuery" placeholder="Search services, salons..." class="w-full pl-12 h-14 text-base rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent px-4" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <select id="countrySelect" onchange="updateCities()" class="h-12 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white">
+                            <option value="">Country</option>
+                            <option value="uae">&#127462;&#127466; UAE</option>
+                            <option value="usa">&#127482;&#127480; USA</option>
+                            <option value="uk">&#127468;&#127463; UK</option>
+                            <option value="russia">&#127479;&#127482; Russia</option>
+                            <option value="france">&#127467;&#127479; France</option>
+                            <option value="germany">&#127465;&#127466; Germany</option>
+                            <option value="italy">&#127470;&#127481; Italy</option>
+                            <option value="spain">&#127466;&#127480; Spain</option>
+                            <option value="turkey">&#127481;&#127479; Turkey</option>
+                            <option value="australia">&#127462;&#127482; Australia</option>
+                        </select>
+
+                        <select id="citySelect" class="h-12 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white">
+                            <option value="">City</option>
+                        </select>
+
+                        <select id="areaSelect" class="h-12 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white">
+                            <option value="">Area</option>
+                            <option>Downtown</option>
+                            <option>Marina</option>
+                            <option>City Center</option>
+                            <option>Suburbs</option>
+                        </select>
+
+                        <select id="categorySelect" class="h-12 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white">
+                            <option value="">Category</option>
+                            <option value="manicure">Manicure</option>
+                            <option value="pedicure">Pedicure</option>
+                            <option value="eyelashes">Eyelashes</option>
+                            <option value="brow">Brow</option>
+                            <option value="barber">Barber</option>
+                            <option value="cosmetology">Cosmetology</option>
+                            <option value="laser">Laser</option>
+                            <option value="makeup">Make up</option>
+                            <option value="hairstylist">Hair Stylist</option>
+                            <option value="tattoo">Tattoo</option>
+                            <option value="piercing">Piercing</option>
+                            <option value="spa">Spa</option>
+                            <option value="massage">Massage</option>
+                            <option value="waxing">Waxing</option>
+                            <option value="facial">Facial</option>
+                            <option value="fitness">Fitness</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <button onclick="doSearch()" class="inline-flex items-center mt-4 h-12 px-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-medium transition-all">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4">
+
+        <!-- Featured Salons -->
+        <section class="py-12 md:py-16">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent flex items-center gap-2">
+                        <svg class="w-8 h-8 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        Premium Salons
+                    </h2>
+                    <p class="text-gray-600 text-sm mt-1">Luxury experiences with exclusive services</p>
+                </div>
+                <a href="/Salon/Listing" class="hidden md:inline-flex items-center px-4 py-2 border border-gray-200 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">View All</a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <!-- Card 1 -->
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&q=80" alt="Beauty Haven Dubai" class="w-full h-full object-cover" />
+                        <div class="absolute top-3 left-3"><span class="bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full">Premium</span></div>
+                        <button class="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-900 mb-1">Beauty Haven Dubai</h3>
+                        <p class="text-xs text-gray-500 mb-2 flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            Downtown Dubai &bull; 1.2 km
+                        </p>
+                        <div class="flex items-center gap-1 mb-3">
+                            <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <span class="text-sm font-semibold">4.9</span>
+                            <span class="text-xs text-gray-500">(248 reviews)</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">Manicure</span>
+                            <span class="text-xs bg-pink-100 text-pink-700 px-2 py-0.5 rounded-full">Spa</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-purple-600">from AED 150</span>
+                            <a href="/Salon/Booking" class="text-xs bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1.5 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all">Book Now</a>
+                        </div>
                     </div>
                 </div>
 
-                <button onclick="prevTestimonial()" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-purple-50 transition-colors z-10">
-                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-                </button>
-                <button onclick="nextTestimonial()" class="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-purple-50 transition-colors z-10">
-                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-                </button>
-            </div>
-
-            <div class="flex justify-center gap-2 mt-6" id="testimonialDots">
-                <button onclick="goToTestimonial(0)" class="h-2 rounded-full transition-all w-8 bg-gradient-to-r from-purple-600 to-pink-600"></button>
-                <button onclick="goToTestimonial(1)" class="h-2 rounded-full transition-all w-2 bg-gray-300"></button>
-                <button onclick="goToTestimonial(2)" class="h-2 rounded-full transition-all w-2 bg-gray-300"></button>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
-            <div class="text-center"><div class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">4.9/5</div><div class="text-sm text-gray-600">Average Rating</div></div>
-            <div class="text-center"><div class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">10K+</div><div class="text-sm text-gray-600">Happy Clients</div></div>
-            <div class="text-center"><div class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">500+</div><div class="text-sm text-gray-600">Partner Salons</div></div>
-            <div class="text-center"><div class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">50K+</div><div class="text-sm text-gray-600">Bookings Made</div></div>
-        </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="py-16 md:py-24 -mx-4 px-4 bg-gradient-to-r from-purple-600 to-pink-600">
-        <div class="text-center max-w-3xl mx-auto">
-            <h2 class="text-3xl md:text-5xl font-bold text-white mb-4">Ready to Transform Your Look?</h2>
-            <p class="text-lg md:text-xl text-purple-100 mb-8">Join thousands of satisfied customers who trust us for their beauty needs</p>
-            <a href="/Salon/Listing" class="inline-flex items-center px-8 py-4 bg-white text-purple-600 hover:bg-gray-100 text-lg rounded-xl font-semibold transition-colors">
-                Browse Salons
-            </a>
-        </div>
-    </section>
-
-</div>
-
-<!-- Footer -->
-<footer class="bg-gray-50 py-12 border-t border-gray-200">
-    <div class="container mx-auto px-4">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-            <div class="col-span-2 md:col-span-1">
-                <div class="flex items-center gap-2 mb-4">
-                    <img src="/icons/logo.svg" alt="Katia Booking Logo" class="w-10 h-10 rounded-full" onerror="this.style.display='none'" />
-                    <span class="text-xl font-bold text-gray-900">Katia Booking</span>
+                <!-- Card 2 -->
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&q=80" alt="Glamour Studio" class="w-full h-full object-cover" />
+                        <div class="absolute top-3 left-3"><span class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">Open Now</span></div>
+                        <button class="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-900 mb-1">Glamour Studio</h3>
+                        <p class="text-xs text-gray-500 mb-2 flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            Dubai Marina &bull; 2.1 km
+                        </p>
+                        <div class="flex items-center gap-1 mb-3">
+                            <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <span class="text-sm font-semibold">4.7</span>
+                            <span class="text-xs text-gray-500">(183 reviews)</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">Hair Styling</span>
+                            <span class="text-xs bg-pink-100 text-pink-700 px-2 py-0.5 rounded-full">Makeup</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-purple-600">from AED 200</span>
+                            <a href="/Salon/Booking" class="text-xs bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1.5 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all">Book Now</a>
+                        </div>
+                    </div>
                 </div>
-                <p class="text-sm text-gray-600">The best platform for salon booking</p>
+
+                <!-- Card 3 -->
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&q=80" alt="Nail Art Paradise" class="w-full h-full object-cover" />
+                        <div class="absolute top-3 left-3"><span class="bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded-full">New</span></div>
+                        <button class="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-900 mb-1">Nail Art Paradise</h3>
+                        <p class="text-xs text-gray-500 mb-2 flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            Business Bay &bull; 0.8 km
+                        </p>
+                        <div class="flex items-center gap-1 mb-3">
+                            <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <span class="text-sm font-semibold">4.8</span>
+                            <span class="text-xs text-gray-500">(94 reviews)</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">Manicure</span>
+                            <span class="text-xs bg-pink-100 text-pink-700 px-2 py-0.5 rounded-full">Pedicure</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-purple-600">from AED 80</span>
+                            <a href="/Salon/Booking" class="text-xs bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1.5 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1487412947147-5cebf100d6a6?w=400&q=80" alt="The Spa Lounge" class="w-full h-full object-cover" />
+                        <div class="absolute top-3 left-3"><span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">Top Rated</span></div>
+                        <button class="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform">
+                            <svg class="w-4 h-4 text-pink-500 fill-pink-500" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-900 mb-1">The Spa Lounge</h3>
+                        <p class="text-xs text-gray-500 mb-2 flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            Jumeirah &bull; 3.0 km
+                        </p>
+                        <div class="flex items-center gap-1 mb-3">
+                            <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <span class="text-sm font-semibold">5.0</span>
+                            <span class="text-xs text-gray-500">(312 reviews)</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mb-3">
+                            <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">Spa</span>
+                            <span class="text-xs bg-pink-100 text-pink-700 px-2 py-0.5 rounded-full">Massage</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-purple-600">from AED 350</span>
+                            <a href="/Salon/Booking" class="text-xs bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1.5 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all">Book Now</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div>
-                <h4 class="font-bold text-gray-900 mb-4">Category</h4>
-                <ul class="space-y-2 text-sm text-gray-600">
-                    <li><a href="/Salon/Listing?category=hairstylist" class="hover:text-purple-600">Hair Stylist</a></li>
-                    <li><a href="/Salon/Listing?category=manicure" class="hover:text-purple-600">Manicure</a></li>
-                    <li><a href="/Salon/Listing?category=spa" class="hover:text-purple-600">Spa</a></li>
-                    <li><a href="/Salon/Listing?category=massage" class="hover:text-purple-600">Massage</a></li>
-                    <li><a href="/Salon/Listing?category=barber" class="hover:text-purple-600">Barber</a></li>
-                </ul>
+
+            <div class="text-center mt-8">
+                <a href="/Salon/Listing" class="inline-flex items-center px-6 py-3 border-2 border-purple-200 text-purple-600 rounded-xl hover:bg-purple-50 font-medium transition-colors">
+                    View All Salons &rarr;
+                </a>
             </div>
-            <div>
-                <h4 class="font-bold text-gray-900 mb-4">Quick Links</h4>
-                <ul class="space-y-2 text-sm text-gray-600">
-                    <li><a href="/Admin/BecomePartner" class="hover:text-purple-600">Become a Partner</a></li>
-                    <li><a href="/Auth" class="hover:text-purple-600">Login as Client</a></li>
-                    <li><a href="/Auth?type=salon" class="hover:text-purple-600">Login as Salon</a></li>
-                    <li><a href="/about" class="hover:text-purple-600">About Us</a></li>
-                </ul>
+        </section>
+
+        <!-- Why Choose Katia -->
+        <section class="py-12 md:py-16 bg-gradient-to-b from-white to-purple-50 -mx-4 px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">Why Choose Katia Booking</h2>
+                <p class="text-gray-600">Experience the future of beauty booking</p>
             </div>
-            <div>
-                <h4 class="font-bold text-gray-900 mb-4">Support</h4>
-                <ul class="space-y-2 text-sm text-gray-600">
-                    <li><a href="/help" class="hover:text-purple-600">Help Center</a></li>
-                    <li><a href="/Contact" class="hover:text-purple-600">Contact Us</a></li>
-                    <li><a href="/privacy" class="hover:text-purple-600">Privacy Policy</a></li>
-                    <li><a href="/terms" class="hover:text-purple-600">Terms of Service</a></li>
-                </ul>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow p-8 text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-purple-600 mb-2">Instant Booking</h3>
+                    <p class="text-sm text-gray-600">Book 24/7 with real-time confirmation</p>
+                </div>
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow p-8 text-center">
+                    <div class="w-16 h-16 bg-pink-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-pink-600 mb-2">Verified Reviews</h3>
+                    <p class="text-sm text-gray-600">Real reviews you can trust</p>
+                </div>
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow p-8 text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-purple-600 mb-2">Best Locations</h3>
+                    <p class="text-sm text-gray-600">Premium salons near you</p>
+                </div>
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow p-8 text-center">
+                    <div class="w-16 h-16 bg-pink-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-pink-600 mb-2">Save Favorites</h3>
+                    <p class="text-sm text-gray-600">Never lose your favorites</p>
+                </div>
             </div>
-        </div>
-        <div class="border-t border-gray-200 pt-8 text-center text-sm text-gray-600">
-            &copy; 2025 Katia Booking. All rights reserved
-        </div>
+        </section>
+
+        <!-- Trusted by Thousands -->
+        <section class="py-12 md:py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">Trusted by Thousands</h2>
+                <p class="text-gray-600">Join our growing community of beauty enthusiasts and salon partners</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-12">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <div id="clientsCount" class="text-3xl font-bold text-gray-900 mb-1">10,000+</div>
+                    <div class="text-sm text-gray-600">Happy Clients</div>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+                    </div>
+                    <div id="salonsCount" class="text-3xl font-bold text-gray-900 mb-1">500+</div>
+                    <div class="text-sm text-gray-600">Partner Salons</div>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                    </div>
+                    <div id="bookingsCount" class="text-3xl font-bold text-gray-900 mb-1">10,000+</div>
+                    <div class="text-sm text-gray-600">Successful Bookings</div>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    </div>
+                    <div class="text-3xl font-bold text-gray-900 mb-1">4.8<span class="text-yellow-500">/5</span></div>
+                    <div class="text-sm text-gray-600">Average Rating</div>
+                </div>
+            </div>
+            <div class="flex flex-wrap justify-center gap-8 text-sm text-gray-500 mb-4">
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    <span>Premium Quality</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span>Secure Booking</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    <span>Instant Confirmation</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    <span>Best Prices</span>
+                </div>
+            </div>
+            <div class="text-center text-sm text-gray-500">Trusted by leading beauty brands globally</div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="py-12 md:py-16 bg-gradient-to-b from-white to-purple-50 -mx-4 px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">What Our Clients Say</h2>
+                <p class="text-gray-600">Join thousands of satisfied customers who trust Katia for their beauty needs</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto relative mb-12">
+                <div class="bg-white rounded-3xl shadow-xl p-8 md:p-12 relative overflow-hidden">
+                    <div class="absolute top-8 right-8 text-purple-200 text-8xl font-serif leading-none select-none">&ldquo;</div>
+
+                    <div id="testimonialContent">
+                        <div class="flex items-start gap-4 mb-6">
+                            <div id="tAvatar" class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold flex-shrink-0">OC</div>
+                            <div>
+                                <h4 id="tName" class="font-bold text-gray-900">Olivia Chen</h4>
+                                <div class="flex gap-1 mt-1">
+                                    <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    <svg class="w-4 h-4 text-yellow-400 fill-yellow-400" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <p id="tText" class="text-gray-700 italic mb-6 text-lg leading-relaxed">
+                            "The variety of salons and services is incredible! I found the perfect place for my wedding makeup. The reviews helped me make the right choice. Thank you Katia!"
+                        </p>
+                        <div id="tInfo" class="flex flex-wrap gap-2 text-sm text-gray-500">
+                            <span>Bridal Makeup</span><span>&bull;</span><span>Beauty Haven</span><span>&bull;</span><span>Dubai, UAE</span><span>&bull;</span><span>1 week ago</span>
+                        </div>
+                    </div>
+
+                    <button onclick="prevTestimonial()" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-purple-50 transition-colors z-10">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                    </button>
+                    <button onclick="nextTestimonial()" class="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-purple-50 transition-colors z-10">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+                    </button>
+                </div>
+
+                <div class="flex justify-center gap-2 mt-6" id="testimonialDots">
+                    <button onclick="goToTestimonial(0)" class="h-2 rounded-full transition-all w-8 bg-gradient-to-r from-purple-600 to-pink-600"></button>
+                    <button onclick="goToTestimonial(1)" class="h-2 rounded-full transition-all w-2 bg-gray-300"></button>
+                    <button onclick="goToTestimonial(2)" class="h-2 rounded-full transition-all w-2 bg-gray-300"></button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
+                <div class="text-center"><div class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">4.9/5</div><div class="text-sm text-gray-600">Average Rating</div></div>
+                <div class="text-center"><div class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">10K+</div><div class="text-sm text-gray-600">Happy Clients</div></div>
+                <div class="text-center"><div class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">500+</div><div class="text-sm text-gray-600">Partner Salons</div></div>
+                <div class="text-center"><div class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">50K+</div><div class="text-sm text-gray-600">Bookings Made</div></div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="py-16 md:py-24 -mx-4 px-4 bg-gradient-to-r from-purple-600 to-pink-600">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl md:text-5xl font-bold text-white mb-4">Ready to Transform Your Look?</h2>
+                <p class="text-lg md:text-xl text-purple-100 mb-8">Join thousands of satisfied customers who trust us for their beauty needs</p>
+                <a href="/Salon/Listing" class="inline-flex items-center px-8 py-4 bg-white text-purple-600 hover:bg-gray-100 text-lg rounded-xl font-semibold transition-colors">
+                    Browse Salons
+                </a>
+            </div>
+        </section>
+
     </div>
-</footer>
 
-<script src="https://cdn.tailwindcss.com"></script>
+    <!-- Footer -->
+    <footer class="bg-gray-50 py-12 border-t border-gray-200">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-2 md:col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <img src="/icons/logo.svg" alt="Katia Booking Logo" class="w-10 h-10 rounded-full" onerror="this.style.display='none'" />
+                        <span class="text-xl font-bold text-gray-900">Katia Booking</span>
+                    </div>
+                    <p class="text-sm text-gray-600">The best platform for salon booking</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Category</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="/Salon/Listing?category=hairstylist" class="hover:text-purple-600">Hair Stylist</a></li>
+                        <li><a href="/Salon/Listing?category=manicure" class="hover:text-purple-600">Manicure</a></li>
+                        <li><a href="/Salon/Listing?category=spa" class="hover:text-purple-600">Spa</a></li>
+                        <li><a href="/Salon/Listing?category=massage" class="hover:text-purple-600">Massage</a></li>
+                        <li><a href="/Salon/Listing?category=barber" class="hover:text-purple-600">Barber</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="/Admin/BecomePartner" class="hover:text-purple-600">Become a Partner</a></li>
+                        <li><a href="/Auth" class="hover:text-purple-600">Login as Client</a></li>
+                        <li><a href="/Auth?type=salon" class="hover:text-purple-600">Login as Salon</a></li>
+                        <li><a href="/about" class="hover:text-purple-600">About Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">Support</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="/help" class="hover:text-purple-600">Help Center</a></li>
+                        <li><a href="/Contact" class="hover:text-purple-600">Contact Us</a></li>
+                        <li><a href="/privacy" class="hover:text-purple-600">Privacy Policy</a></li>
+                        <li><a href="/terms" class="hover:text-purple-600">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 pt-8 text-center text-sm text-gray-600">
+                &copy; 2025 Katia Booking. All rights reserved
+            </div>
+        </div>
+    </footer>
 
-<script>
-    // Sign-in dropdown
-    function toggleSignIn(e) {
-        e.stopPropagation();
-        document.getElementById('signinDropdown').classList.toggle('hidden');
-    }
-    document.addEventListener('click', function() {
-        document.getElementById('signinDropdown').classList.add('hidden');
-    });
-
-    // City data
-    const citiesData = {
-        uae: ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ajman'],
-        usa: ['New York', 'Los Angeles', 'Chicago', 'Miami', 'San Francisco'],
-        uk: ['London', 'Manchester', 'Birmingham', 'Liverpool'],
-        russia: ['Moscow', 'Saint Petersburg', 'Novosibirsk', 'Kazan'],
-        france: ['Paris', 'Marseille', 'Lyon', 'Toulouse'],
-        germany: ['Berlin', 'Munich', 'Frankfurt', 'Hamburg'],
-        italy: ['Rome', 'Milan', 'Naples', 'Turin'],
-        spain: ['Madrid', 'Barcelona', 'Valencia', 'Seville'],
-        turkey: ['Istanbul', 'Ankara', 'Izmir', 'Bursa'],
-        australia: ['Sydney', 'Melbourne', 'Brisbane', 'Perth']
-    };
-
-    function updateCities() {
-        const country = document.getElementById('countrySelect').value;
-        const citySelect = document.getElementById('citySelect');
-        citySelect.innerHTML = '<option value="">City</option>';
-        if (citiesData[country]) {
-            citiesData[country].forEach(city => {
-                const opt = document.createElement('option');
-                opt.value = city.toLowerCase().replace(/\s+/g, '');
-                opt.textContent = city;
-                citySelect.appendChild(opt);
-            });
+    <script>
+        // Sign-in dropdown
+        function toggleSignIn(e) {
+            e.stopPropagation();
+            document.getElementById('signinDropdown').classList.toggle('hidden');
         }
-    }
+        document.addEventListener('click', function() {
+            document.getElementById('signinDropdown').classList.add('hidden');
+            document.getElementById('user-dropdown-home')?.classList.add('hidden');
+        });
 
-    function doSearch() {
-        const q = document.getElementById('searchQuery').value;
-        const cat = document.getElementById('categorySelect').value;
-        const city = document.getElementById('citySelect').value;
-        let url = '/Salon/Listing?';
-        if (q) url += 'q=' + encodeURIComponent(q) + '&';
-        if (cat) url += 'category=' + encodeURIComponent(cat) + '&';
-        if (city) url += 'city=' + encodeURIComponent(city) + '&';
-        window.location.href = url;
-    }
-
-    // Testimonials
-    const testimonials = [
-        { initials: 'OC', name: 'Olivia Chen', text: '"The variety of salons and services is incredible! I found the perfect place for my wedding makeup. The reviews helped me make the right choice. Thank you Katia!"', info: 'Bridal Makeup &bull; Beauty Haven &bull; Dubai, UAE &bull; 1 week ago' },
-        { initials: 'EM', name: 'Emma Martinez', text: '"I love how I can book appointments instantly through the app! No more waiting for callbacks. The reminders are super helpful too. Best beauty booking platform I\'ve used!"', info: 'Manicure &amp; Pedicure &bull; Nail Art Paradise &bull; Abu Dhabi, UAE &bull; 3 days ago' },
-        { initials: 'SJ', name: 'Sarah Johnson', text: '"Amazing platform! Found the perfect salon for my needs. The booking process was seamless and the staff was professional. Highly recommend!"', info: 'Hair Styling &bull; Glamour Studio &bull; Dubai, UAE &bull; 2 weeks ago' }
-    ];
-    let currentT = 0;
-
-    function renderTestimonial(idx) {
-        const t = testimonials[idx];
-        document.getElementById('tAvatar').textContent = t.initials;
-        document.getElementById('tName').textContent = t.name;
-        document.getElementById('tText').textContent = t.text;
-        document.getElementById('tInfo').innerHTML = t.info;
-        const dots = document.getElementById('testimonialDots').children;
-        for (let i = 0; i < dots.length; i++) {
-            dots[i].className = i === idx
-                ? 'h-2 rounded-full transition-all w-8 bg-gradient-to-r from-purple-600 to-pink-600'
-                : 'h-2 rounded-full transition-all w-2 bg-gray-300';
+        // Check auth state
+        async function checkAuthHome() {
+            const token = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+        
+            if (!token || !userData) {
+                document.getElementById('auth-buttons-home').classList.remove('hidden');
+                document.getElementById('user-menu-home').classList.add('hidden');
+                return;
+            }
+        
+            try {
+                const user = JSON.parse(userData);
+                const resp = await fetch('/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
+            
+                if (resp.ok) {
+                    document.getElementById('auth-buttons-home').classList.add('hidden');
+                    document.getElementById('user-menu-home').classList.remove('hidden');
+                    document.getElementById('user-initial-home').textContent = (user.fullName || user.email || '?')[0].toUpperCase();
+                    document.getElementById('user-name-home').textContent = user.fullName || user.email || '';
+                
+                    const role = user.role || 'Client';
+                    const dashboards = { SuperAdmin: '/superadmin', Owner: '/owner', Admin: '/admin', Master: '/master', Client: '/client' };
+                    document.getElementById('dashboard-link-home').href = dashboards[role] || '/client';
+                } else {
+                    document.getElementById('auth-buttons-home').classList.remove('hidden');
+                    document.getElementById('user-menu-home').classList.add('hidden');
+                }
+            } catch (e) {
+                document.getElementById('auth-buttons-home').classList.remove('hidden');
+                document.getElementById('user-menu-home').classList.add('hidden');
+            }
         }
-    }
-    function nextTestimonial() { currentT = (currentT + 1) % testimonials.length; renderTestimonial(currentT); }
-    function prevTestimonial() { currentT = (currentT - 1 + testimonials.length) % testimonials.length; renderTestimonial(currentT); }
-    function goToTestimonial(i) { currentT = i; renderTestimonial(i); }
 
-    // Animated counters
-    let bookings = 10000, clients = 10000, salons = 500;
-    setInterval(() => { bookings += Math.floor(Math.random() * 3) + 1; document.getElementById('bookingsCount').textContent = bookings.toLocaleString() + '+'; }, 2000);
-    setInterval(() => { clients += Math.floor(Math.random() * 2) + 1; document.getElementById('clientsCount').textContent = clients.toLocaleString() + '+'; }, 3000);
-    setInterval(() => { if (Math.random() > 0.7) { salons++; document.getElementById('salonsCount').textContent = salons.toLocaleString() + '+'; } }, 5000);
-</script>
+        function toggleUserMenuHome(e) {
+            e?.stopPropagation();
+            document.getElementById('user-dropdown-home').classList.toggle('hidden');
+        }
+
+        function signOutHome() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            window.location.reload();
+        }
+
+        checkAuthHome();
+
+        // City data
+        const citiesData = {
+            uae: ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ajman'],
+            usa: ['New York', 'Los Angeles', 'Chicago', 'Miami', 'San Francisco'],
+            uk: ['London', 'Manchester', 'Birmingham', 'Liverpool'],
+            russia: ['Moscow', 'Saint Petersburg', 'Novosibirsk', 'Kazan'],
+            france: ['Paris', 'Marseille', 'Lyon', 'Toulouse'],
+            germany: ['Berlin', 'Munich', 'Frankfurt', 'Hamburg'],
+            italy: ['Rome', 'Milan', 'Naples', 'Turin'],
+            spain: ['Madrid', 'Barcelona', 'Valencia', 'Seville'],
+            turkey: ['Istanbul', 'Ankara', 'Izmir', 'Bursa'],
+            australia: ['Sydney', 'Melbourne', 'Brisbane', 'Perth']
+        };
+
+        function updateCities() {
+            const country = document.getElementById('countrySelect').value;
+            const citySelect = document.getElementById('citySelect');
+            citySelect.innerHTML = '<option value="">City</option>';
+            if (citiesData[country]) {
+                citiesData[country].forEach(city => {
+                    const opt = document.createElement('option');
+                    opt.value = city.toLowerCase().replace(/\s+/g, '');
+                    opt.textContent = city;
+                    citySelect.appendChild(opt);
+                });
+            }
+        }
+
+        function doSearch() {
+            const q = document.getElementById('searchQuery').value;
+            const cat = document.getElementById('categorySelect').value;
+            const city = document.getElementById('citySelect').value;
+            let url = '/Salon/Listing?';
+            if (q) url += 'q=' + encodeURIComponent(q) + '&';
+            if (cat) url += 'category=' + encodeURIComponent(cat) + '&';
+            if (city) url += 'city=' + encodeURIComponent(city) + '&';
+            window.location.href = url;
+        }
+
+        // Testimonials
+        const testimonials = [
+            { initials: 'OC', name: 'Olivia Chen', text: '"The variety of salons and services is incredible! I found the perfect place for my wedding makeup. The reviews helped me make the right choice. Thank you Katia!"', info: 'Bridal Makeup &bull; Beauty Haven &bull; Dubai, UAE &bull; 1 week ago' },
+            { initials: 'EM', name: 'Emma Martinez', text: '"I love how I can book appointments instantly through the app! No more waiting for callbacks. The reminders are super helpful too. Best beauty booking platform I\'ve used!"', info: 'Manicure &amp; Pedicure &bull; Nail Art Paradise &bull; Abu Dhabi, UAE &bull; 3 days ago' },
+            { initials: 'SJ', name: 'Sarah Johnson', text: '"Amazing platform! Found the perfect salon for my needs. The booking process was seamless and the staff was professional. Highly recommend!"', info: 'Hair Styling &bull; Glamour Studio &bull; Dubai, UAE &bull; 2 weeks ago' }
+        ];
+        let currentT = 0;
+
+        function renderTestimonial(idx) {
+            const t = testimonials[idx];
+            document.getElementById('tAvatar').textContent = t.initials;
+            document.getElementById('tName').textContent = t.name;
+            document.getElementById('tText').textContent = t.text;
+            document.getElementById('tInfo').innerHTML = t.info;
+            const dots = document.getElementById('testimonialDots').children;
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].className = i === idx
+                    ? 'h-2 rounded-full transition-all w-8 bg-gradient-to-r from-purple-600 to-pink-600'
+                    : 'h-2 rounded-full transition-all w-2 bg-gray-300';
+            }
+        }
+        function nextTestimonial() { currentT = (currentT + 1) % testimonials.length; renderTestimonial(currentT); }
+        function prevTestimonial() { currentT = (currentT - 1 + testimonials.length) % testimonials.length; renderTestimonial(currentT); }
+        function goToTestimonial(i) { currentT = i; renderTestimonial(i); }
+
+        // Animated counters
+        let bookings = 10000, clients = 10000, salons = 500;
+        setInterval(() => { bookings += Math.floor(Math.random() * 3) + 1; document.getElementById('bookingsCount').textContent = bookings.toLocaleString() + '+'; }, 2000);
+        setInterval(() => { clients += Math.floor(Math.random() * 2) + 1; document.getElementById('clientsCount').textContent = clients.toLocaleString() + '+'; }, 3000);
+        setInterval(() => { if (Math.random() > 0.7) { salons++; document.getElementById('salonsCount').textContent = salons.toLocaleString() + '+'; } }, 5000);
+    </script>
+</body>
+</html>

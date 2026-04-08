@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: crmkatia-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-katia_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-katia_user}
+      POSTGRES_DB: ${POSTGRES_DB:-katia}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - crmkatia-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-katia_user} -d ${POSTGRES_DB:-katia}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crmkatia-app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Production}
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${POSTGRES_DB:-katia};Username=${POSTGRES_USER:-katia_user};Password=${POSTGRES_PASSWORD:-katia_user};Include Error Detail=true
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-your-super-secret-key-min-32-characters-long!!!}
+      - JwtSettings__Issuer=${JWT_ISSUER:-katia-api}
+      - JwtSettings__Audience=${JWT_AUDIENCE:-katia-clients}
+      - JwtSettings__ExpiryMinutes=${JWT_EXPIRY_MINUTES:-60}
+      - Stripe__SecretKey=${STRIPE_SECRET_KEY:-sk_test_your_stripe_secret_key}
+      - Stripe__PublishableKey=${STRIPE_PUBLISHABLE_KEY:-pk_test_your_stripe_publishable_key}
+      - ApplyMigrationsOnStartup=true
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - crmkatia-network
+    volumes:
+      - uploads_data:/app/wwwroot/uploads
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  crmkatia-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  uploads_data:

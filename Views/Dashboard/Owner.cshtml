@@ -11,50 +11,248 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Katia</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .nav-link { transition: all 0.2s; }
+        .nav-link:hover { transform: translateX(4px); }
+        .nav-link.active { background: linear-gradient(to right, #9333ea, #ec4899); color: white; }
+        .sidebar-scroll::-webkit-scrollbar { width: 6px; }
+        .sidebar-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+        .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+        .panel { display: none; }
+        .panel.active { display: block; }
+</style>
 </head>
 <body class="min-h-screen bg-gray-50">
+<script>
+    let salonId = null;
+    let currentUser = null;
+</script>
 
-    <div class="flex h-screen overflow-hidden">
+<div class="flex h-screen overflow-hidden">
 
         <!-- Sidebar -->
-        <aside class="w-64 bg-white border-r border-gray-200 flex flex-col hidden md:flex">
-            <div class="p-6 border-b border-gray-200">
-                <a href="/" class="flex items-center gap-2">
+        <aside class="w-64 bg-white border-r border-gray-200 flex flex-col overflow-hidden">
+            <!-- Logo & User Info -->
+            <div class="p-4 border-b border-gray-200">
+                <a href="/" class="flex items-center gap-2 mb-4">
                     <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
                         <span class="text-white font-bold text-sm">K</span>
                     </div>
                     <span class="font-bold text-lg bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Katia</span>
                 </a>
-                <p class="text-xs text-gray-500 mt-1">Owner Dashboard</p>
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center text-white font-semibold">
+                        <span id="user-initials">??</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="font-semibold text-gray-900 truncate" id="user-name-display">Loading...</div>
+                        <div class="text-xs text-gray-500">Owner</div>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2" id="salon-name-sidebar">Loading your salon...</p>
             </div>
-            <nav class="flex-1 p-4 space-y-1">
-                <a href="#" onclick="showPanel('overview')" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+
+            <!-- Menu Items -->
+            <nav class="flex-1 overflow-y-auto sidebar-scroll p-2 space-y-1">
+                <!-- Overview -->
+                <button onclick="switchTab('overview')" class="nav-link active w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left" data-tab="overview">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                     Overview
-                </a>
-                <a href="#" onclick="showPanel('bookings')" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
+                </button>
+
+                <!-- My Salons -->
+                <button onclick="switchTab('my-salons')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="my-salons">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    🏪 My Salons
+                </button>
+
+                <!-- Calendar -->
+                <button onclick="switchTab('calendar')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="calendar">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                    Bookings
-                </a>
-                <a href="#" onclick="showPanel('staff')" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    Staff / Masters
-                </a>
-                <a href="#" onclick="showPanel('services')" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                    Services
-                </a>
-                <a href="#" onclick="showPanel('clients')" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
+                    Calendar
+                </button>
+
+                <!-- Clients -->
+                <button onclick="switchTab('clients')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="clients">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                     Clients
-                </a>
-                <a href="/feed" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z"/></svg>
-                    Beauty Feed
-                </a>
+                </button>
+
+                <!-- Masters & Targets -->
+                <button onclick="switchTab('masters')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="masters">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                    Masters & Targets
+                </button>
+
+                <!-- Services -->
+                <button onclick="switchTab('services')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="services">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243z"/></svg>
+                    Services
+                </button>
+
+                <!-- Separator: Game-Changing Features -->
+                <div class="pt-4 pb-2 px-4">
+                    <p class="text-xs font-semibold text-gray-400 uppercase">🚀 Advanced Features</p>
+                </div>
+
+                <!-- Package Deals -->
+                <button onclick="switchTab('package-deals')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="package-deals">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                    📦 Package Deals
+                </button>
+
+                <!-- Dynamic Pricing -->
+                <button onclick="switchTab('dynamic-pricing')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="dynamic-pricing">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                    💰 Dynamic Pricing
+                </button>
+
+                <!-- Gift Cards -->
+                <button onclick="switchTab('gift-cards')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="gift-cards">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/></svg>
+                    🎁 Gift Cards
+                </button>
+
+                <!-- Referral Program -->
+                <button onclick="switchTab('referral-program')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="referral-program">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                    💝 Referral Program
+                </button>
+
+                <!-- AI Smart Filling -->
+                <button onclick="switchTab('ai-smart-filling')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="ai-smart-filling">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                    🤖 AI Smart Filling
+                </button>
+
+                <!-- Advanced Forecasting -->
+                <button onclick="switchTab('advanced-forecasting')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="advanced-forecasting">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    ⚡ Forecasting
+                </button>
+
+                <!-- Booking Settings -->
+                <button onclick="switchTab('booking-settings')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="booking-settings">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    ⚙️ Booking Settings
+                </button>
+
+                <!-- Separator: Management -->
+                <div class="pt-4 pb-2 px-4">
+                    <p class="text-xs font-semibold text-gray-400 uppercase">📊 Management</p>
+                </div>
+
+                <!-- Products -->
+                <button onclick="switchTab('products')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="products">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                    Products
+                </button>
+
+                <!-- Inventory -->
+                <button onclick="switchTab('inventory')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="inventory">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                    Inventory
+                </button>
+
+                <!-- Attendance -->
+                <button onclick="switchTab('attendance')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="attendance">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    Attendance
+                </button>
+
+                <!-- Reviews -->
+                <button onclick="switchTab('reviews')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="reviews">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    Reviews
+                </button>
+
+                <!-- Staff Management -->
+                <button onclick="switchTab('staff')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="staff">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                    Staff Management
+                </button>
+
+                <!-- Expenses -->
+                <button onclick="switchTab('expense')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="expense">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Expenses
+                </button>
+
+                <!-- Loyalty Program -->
+                <button onclick="switchTab('loyalty')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="loyalty">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/></svg>
+                    Loyalty Program
+                </button>
+
+                <!-- Separator: Analytics -->
+                <div class="pt-4 pb-2 px-4">
+                    <p class="text-xs font-semibold text-gray-400 uppercase">📈 Insights</p>
+                </div>
+
+                <!-- Advanced Analytics -->
+                <button onclick="switchTab('advanced-analytics')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="advanced-analytics">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    Advanced Analytics
+                </button>
+
+                <!-- Feed Analytics -->
+                <button onclick="switchTab('feed-analytics')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="feed-analytics">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                    Feed Analytics
+                </button>
+
+                <!-- Waiting List -->
+                <button onclick="switchTab('waiting-list')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="waiting-list">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Waiting List
+                </button>
+
+                <!-- Notifications -->
+                <button onclick="switchTab('notifications')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="notifications">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                    Notifications
+                </button>
+
+                <!-- Separator: Tools -->
+                <div class="pt-4 pb-2 px-4">
+                    <p class="text-xs font-semibold text-gray-400 uppercase">🛠️ Tools</p>
+                </div>
+
+                <!-- Photos & Gallery -->
+                <button onclick="switchTab('media')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="media">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    Photos & Gallery
+                </button>
+
+                <!-- Marketing -->
+                <button onclick="switchTab('marketing')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="marketing">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                    Marketing
+                </button>
+
+                <!-- AI Tools -->
+                <button onclick="switchTab('ai-tools')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="ai-tools">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                    AI Tools
+                </button>
+
+                <!-- Export Data -->
+                <button onclick="switchTab('export')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="export">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Export Data
+                </button>
+
+                <!-- Settings -->
+                <button onclick="switchTab('settings')" class="nav-link w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-left text-gray-700 hover:bg-purple-50 hover:text-purple-600" data-tab="settings">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    Settings
+                </button>
             </nav>
+
+            <!-- Logout -->
             <div class="p-4 border-t border-gray-200">
-                <button onclick="signOut()" class="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                <button onclick="signOut()" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                     Sign Out
                 </button>
@@ -64,147 +262,272 @@
         <!-- Main Content -->
         <div class="flex-1 overflow-y-auto">
             <!-- Top Bar -->
-            <div class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+            <div class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
                 <div>
-                    <h1 class="text-xl font-bold text-gray-900">Owner Dashboard</h1>
-                    <p id="salon-name-header" class="text-sm text-gray-500">Loading your salon...</p>
+                    <h1 id="page-title" class="text-xl font-bold text-gray-900">Dashboard</h1>
+                    <p id="page-subtitle" class="text-sm text-gray-500">Welcome back!</p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <span id="user-name" class="text-sm font-medium text-gray-700"></span>
-                    <div class="w-9 h-9 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
-                        <span id="user-initial" class="text-white font-bold text-sm">?</span>
-                    </div>
+                    <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Refresh">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    </button>
+                    <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors relative" title="Notifications">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                        <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">3</span>
+                    </button>
                 </div>
             </div>
 
             <div class="p-6">
-
                 <!-- Overview Panel -->
-                <div id="panel-overview">
-                    <!-- Stats Cards -->
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                            <div class="flex items-center justify-between mb-3">
-                                <p class="text-sm text-gray-500">Today's Bookings</p>
-                                <div class="w-9 h-9 bg-purple-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                </div>
-                            </div>
-                            <p id="stat-today" class="text-3xl font-bold text-gray-900">—</p>
-                        </div>
-                        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                            <div class="flex items-center justify-between mb-3">
-                                <p class="text-sm text-gray-500">Total Clients</p>
-                                <div class="w-9 h-9 bg-blue-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                </div>
-                            </div>
-                            <p id="stat-clients" class="text-3xl font-bold text-gray-900">—</p>
-                        </div>
-                        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                            <div class="flex items-center justify-between mb-3">
-                                <p class="text-sm text-gray-500">Revenue (Month)</p>
-                                <div class="w-9 h-9 bg-green-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                </div>
-                            </div>
-                            <p id="stat-revenue" class="text-3xl font-bold text-gray-900">—</p>
-                        </div>
-                        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                            <div class="flex items-center justify-between mb-3">
-                                <p class="text-sm text-gray-500">Rating</p>
-                                <div class="w-9 h-9 bg-yellow-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-yellow-600 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                                </div>
-                            </div>
-                            <p id="stat-rating" class="text-3xl font-bold text-gray-900">—</p>
-                        </div>
-                    </div>
-
-                    <!-- Recent Bookings -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-lg font-bold text-gray-900">Recent Bookings</h2>
-                            <button onclick="showPanel('bookings')" class="text-sm text-purple-600 hover:underline">View all</button>
-                        </div>
-                        <div id="recent-bookings">
-                            <div class="text-center py-8 text-gray-400 text-sm">Loading bookings...</div>
-                        </div>
-                    </div>
+                <div id="panel-overview" class="panel active">
+                    @await Html.PartialAsync("~/Views/Dashboard/_OverviewPanel.cshtml")
                 </div>
 
-                <!-- Bookings Panel -->
-                <div id="panel-bookings" class="hidden">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-bold text-gray-900">All Bookings</h2>
-                        <select id="booking-status-filter" onchange="loadBookings()" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
-                            <option value="">All Statuses</option>
-                            <option value="pending">Pending</option>
-                            <option value="confirmed">Confirmed</option>
-                            <option value="completed">Completed</option>
-                            <option value="cancelled">Cancelled</option>
-                        </select>
-                    </div>
-                    <div id="bookings-list" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="text-center py-8 text-gray-400 text-sm">Loading...</div>
-                    </div>
+                <!-- My Salons Panel -->
+                <div id="panel-my-salons" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_MySalonsPanel.cshtml")
                 </div>
 
-                <!-- Staff Panel -->
-                <div id="panel-staff" class="hidden">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-bold text-gray-900">Staff / Masters</h2>
-                        <button class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90">+ Add Master</button>
-                    </div>
-                    <div id="staff-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        <div class="text-gray-400 text-sm col-span-full text-center py-8">Loading staff...</div>
-                    </div>
-                </div>
-
-                <!-- Services Panel -->
-                <div id="panel-services" class="hidden">
-                    <h2 class="text-xl font-bold text-gray-900 mb-6">Services</h2>
-                    <div id="services-list" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="text-center py-8 text-gray-400 text-sm">Loading services...</div>
-                    </div>
+                <!-- Calendar Panel -->
+                <div id="panel-calendar" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_CalendarPanel.cshtml")
                 </div>
 
                 <!-- Clients Panel -->
-                <div id="panel-clients" class="hidden">
-                    <h2 class="text-xl font-bold text-gray-900 mb-6">Clients</h2>
-                    <div id="clients-list" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="text-center py-8 text-gray-400 text-sm">Loading clients...</div>
-                    </div>
+                <div id="panel-clients" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_ClientsPanel.cshtml")
+                </div>
+
+                <!-- Masters Panel -->
+                <div id="panel-masters" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_MastersPanel.cshtml")
+                </div>
+
+                <!-- Services Panel -->
+                <div id="panel-services" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_ServicesPanel.cshtml")
+                </div>
+
+                <!-- Package Deals Panel -->
+                <div id="panel-package-deals" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_PackageDealsPanel.cshtml")
+                </div>
+
+                <!-- Dynamic Pricing Panel -->
+                <div id="panel-dynamic-pricing" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_DynamicPricingPanel.cshtml")
+                </div>
+
+                <!-- Gift Cards Panel -->
+                <div id="panel-gift-cards" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_GiftCardsPanel.cshtml")
+                </div>
+
+                <!-- Referral Program Panel -->
+                <div id="panel-referral-program" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_ReferralProgramPanel.cshtml")
+                </div>
+
+                <!-- AI Smart Filling Panel -->
+                <div id="panel-ai-smart-filling" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_AISmartFillingPanel.cshtml")
+                </div>
+
+                <!-- Advanced Forecasting Panel -->
+                <div id="panel-advanced-forecasting" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_AdvancedForecastingPanel.cshtml")
+                </div>
+
+                <!-- Booking Settings Panel -->
+                <div id="panel-booking-settings" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_BookingSettingsPanel.cshtml")
+                </div>
+
+                <!-- Products Panel -->
+                <div id="panel-products" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_ProductsPanel.cshtml")
+                </div>
+
+                <!-- Inventory Panel -->
+                <div id="panel-inventory" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_InventoryPanel.cshtml")
+                </div>
+
+                <!-- Attendance Panel -->
+                <div id="panel-attendance" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_AttendancePanel.cshtml")
+                </div>
+
+                <!-- Reviews Panel -->
+                <div id="panel-reviews" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_ReviewsPanel.cshtml")
+                </div>
+
+                <!-- Staff Panel -->
+                <div id="panel-staff" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_StaffPanel.cshtml")
+                </div>
+
+                <!-- Expense Panel -->
+                <div id="panel-expense" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_ExpensePanel.cshtml")
+                </div>
+
+                <!-- Loyalty Panel -->
+                <div id="panel-loyalty" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_LoyaltyPanel.cshtml")
+                </div>
+
+                <!-- Advanced Analytics Panel -->
+                <div id="panel-advanced-analytics" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_AdvancedAnalyticsPanel.cshtml")
+                </div>
+
+                <!-- Feed Analytics Panel -->
+                <div id="panel-feed-analytics" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_FeedAnalyticsPanel.cshtml")
+                </div>
+
+                <!-- Waiting List Panel -->
+                <div id="panel-waiting-list" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_WaitingListPanel.cshtml")
+                </div>
+
+                <!-- Notifications Panel -->
+                <div id="panel-notifications" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_NotificationsPanel.cshtml")
+                </div>
+
+                <!-- Media Panel -->
+                <div id="panel-media" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_MediaPanel.cshtml")
+                </div>
+
+                <!-- Marketing Panel -->
+                <div id="panel-marketing" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_MarketingPanel.cshtml")
+                </div>
+
+                <!-- AI Tools Panel -->
+                <div id="panel-ai-tools" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_AIToolsPanel.cshtml")
+                </div>
+
+                <!-- Export Panel -->
+                <div id="panel-export" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_ExportPanel.cshtml")
+                </div>
+
+                <!-- Settings Panel -->
+                <div id="panel-settings" class="panel">
+                    @await Html.PartialAsync("~/Views/Dashboard/_SettingsPanel.cshtml")
                 </div>
             </div>
         </div>
     </div>
 
 <script>
-let salonId = null;
+const tabTitles = {
+    'overview': { title: 'Dashboard', subtitle: 'Welcome back!' },
+    'my-salons': { title: 'My Salons', subtitle: 'Manage multiple salon locations' },
+    'calendar': { title: 'Calendar', subtitle: 'Manage your booking calendar' },
+    'clients': { title: 'Clients', subtitle: 'Client database and history' },
+    'masters': { title: 'Masters & Targets', subtitle: 'Performance tracking and targets' },
+    'services': { title: 'Services', subtitle: 'Manage salon services' },
+    'package-deals': { title: 'Package Deals', subtitle: 'Create bundled service packages' },
+    'dynamic-pricing': { title: 'Dynamic Pricing', subtitle: 'Real-time price adjustments' },
+    'gift-cards': { title: 'Gift Cards', subtitle: 'Manage gift card programs' },
+    'referral-program': { title: 'Referral Program', subtitle: 'Client referral rewards' },
+    'ai-smart-filling': { title: 'AI Smart Filling', subtitle: 'AI-powered appointment management' },
+    'advanced-forecasting': { title: 'Advanced Forecasting', subtitle: 'Predictive business analytics' },
+    'booking-settings': { title: 'Booking Settings', subtitle: 'Configure booking preferences' },
+    'products': { title: 'Products', subtitle: 'Product catalog management' },
+    'inventory': { title: 'Inventory', subtitle: 'Manage product stock levels' },
+    'attendance': { title: 'Attendance', subtitle: 'Track staff attendance' },
+    'reviews': { title: 'Reviews', subtitle: 'Manage client feedback' },
+    'staff': { title: 'Staff Management', subtitle: 'Manage team members' },
+    'expense': { title: 'Expenses', subtitle: 'Financial tracking and costs' },
+    'loyalty': { title: 'Loyalty Program', subtitle: 'Manage client rewards' },
+    'advanced-analytics': { title: 'Advanced Analytics', subtitle: 'Detailed business insights' },
+    'feed-analytics': { title: 'Feed Analytics', subtitle: 'Social feed performance' },
+    'waiting-list': { title: 'Waiting List', subtitle: 'Manage appointment queue' },
+    'notifications': { title: 'Notifications', subtitle: 'Alert preferences and history' },
+    'media': { title: 'Photos & Gallery', subtitle: 'Media management' },
+    'marketing': { title: 'Marketing', subtitle: 'Promotional campaigns' },
+    'ai-tools': { title: 'AI Tools', subtitle: 'Configure AI features' },
+    'export': { title: 'Export Data', subtitle: 'Download and backup data' },
+    'settings': { title: 'Settings', subtitle: 'Salon configuration' }
+};
+
+function switchTab(tabName) {
+    document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(el => {
+        el.classList.remove('active');
+        el.classList.add('text-gray-700', 'hover:bg-purple-50', 'hover:text-purple-600');
+    });
+    
+    const panel = document.getElementById('panel-' + tabName);
+    const navLink = document.querySelector(`[data-tab="${tabName}"]`);
+    
+    if (panel) panel.classList.add('active');
+    if (navLink) {
+        navLink.classList.add('active');
+        navLink.classList.remove('text-gray-700', 'hover:bg-purple-50', 'hover:text-purple-600');
+    }
+    
+const titleInfo = tabTitles[tabName] || { title: 'Dashboard', subtitle: '' };
+document.getElementById('page-title').textContent = titleInfo.title;
+document.getElementById('page-subtitle').textContent = titleInfo.subtitle;
+
+if (tabName === 'my-salons' && currentUser) loadMySalons();
+else if (tabName === 'clients' && salonId) loadClientsList();
+else if (tabName === 'staff' && salonId) loadStaff();
+else if (tabName === 'masters' && salonId) loadMasters();
+else if (tabName === 'services' && salonId) loadServices();
+else if (tabName === 'calendar' && salonId) loadCalendar();
+else if (tabName === 'products' && salonId) loadProducts();
+else if (tabName === 'inventory' && salonId) loadInventory();
+else if (tabName === 'reviews' && salonId) loadReviews();
+else if (tabName === 'notifications' && salonId) loadNotifications();
+else if (tabName === 'attendance' && salonId) loadAttendance();
+else if (tabName === 'settings' && salonId) loadSettings();
+}
 
 async function init() {
     const token = localStorage.getItem('auth_token');
     if (!token) { window.location.href = '/auth'; return; }
 
     try {
-        const resp = await fetch('/api/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
+        const resp = await fetch('/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
         if (!resp.ok) { window.location.href = '/auth'; return; }
         const user = await resp.json();
+        currentUser = user;
 
-        document.getElementById('user-name').textContent = user.fullName || user.email || '';
-        document.getElementById('user-initial').textContent = (user.fullName || user.email || '?')[0].toUpperCase();
+        document.getElementById('user-name-display').textContent = user.fullName || user.email || '';
+        document.getElementById('user-initials').textContent = (user.fullName || user.email || '??').split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
 
-        // Get salon
-        const salonResp = await fetch('/api/salons/user/' + user.id, { headers: { 'Authorization': 'Bearer ' + token } });
+        const salonResp = await fetch('/salons/user/' + user.id, { headers: { 'Authorization': 'Bearer ' + token } });
         if (salonResp.ok) {
             const salonData = await salonResp.json();
-            const salon = salonData.salon || salonData;
-            if (salon) {
+            const salons = salonData.salons || salonData || [];
+            if (salons && salons.length > 0) {
+                // Check for stored salon preference
+                const storedSalonId = localStorage.getItem('selected_salon_id');
+                let salon = salons[0];
+                
+                if (storedSalonId) {
+                    const foundSalon = salons.find(s => s.id === storedSalonId || s.id === storedSalonId.replace(/['"]/g, ''));
+                    if (foundSalon) {
+                        salon = foundSalon;
+                    }
+                }
+                
                 salonId = salon.id;
-                document.getElementById('salon-name-header').textContent = salon.name;
-                document.getElementById('stat-rating').textContent = (salon.rating || 0).toFixed(1);
+                document.getElementById('salon-name-sidebar').textContent = salon.name;
                 loadDashboardData();
+            } else {
+                document.getElementById('salon-name-sidebar').textContent = 'No salon found';
             }
         }
     } catch (e) {
@@ -214,62 +537,30 @@ async function init() {
 
 async function loadDashboardData() {
     const token = localStorage.getItem('auth_token') || '';
-    // Load bookings
+    
     try {
-        const resp = await fetch('/api/bookings?salonId=' + salonId, { headers: { 'Authorization': 'Bearer ' + token } });
+        const resp = await fetch('/bookings/salon/' + salonId, { headers: { 'Authorization': 'Bearer ' + token } });
         if (resp.ok) {
             const data = await resp.json();
-            const bookings = data.bookings || data || [];
-            const today = new Date().toDateString();
-            const todayBookings = bookings.filter(b => new Date(b.startTime).toDateString() === today);
-            document.getElementById('stat-today').textContent = todayBookings.length;
-
-            const recentEl = document.getElementById('recent-bookings');
-            if (!bookings.length) {
-                recentEl.innerHTML = '<p class="text-center py-8 text-gray-400 text-sm">No bookings yet.</p>';
-                return;
-            }
-            recentEl.innerHTML = `
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead><tr class="border-b border-gray-100">
-                            <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Client</th>
-                            <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Service</th>
-                            <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Date</th>
-                            <th class="text-left py-2 px-3 text-xs font-semibold text-gray-500">Status</th>
-                        </tr></thead>
-                        <tbody>${bookings.slice(0,10).map(b => `
-                            <tr class="border-b border-gray-50 hover:bg-gray-50">
-                                <td class="py-3 px-3 font-medium">${b.clientName || b.customerName || '—'}</td>
-                                <td class="py-3 px-3 text-gray-600">${b.serviceName || '—'}</td>
-                                <td class="py-3 px-3 text-gray-600">${b.startTime ? new Date(b.startTime).toLocaleDateString() : '—'}</td>
-                                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full text-xs font-medium ${statusClass(b.status)}">${b.status || 'pending'}</span></td>
-                            </tr>`).join('')}
-                        </tbody>
-                    </table>
-                </div>`;
-        }
-    } catch (e) {}
-
-    // Load clients
-    try {
-        const resp = await fetch('/api/clients?salonId=' + salonId, { headers: { 'Authorization': 'Bearer ' + token } });
-        if (resp.ok) {
-            const data = await resp.json();
-            document.getElementById('stat-clients').textContent = (data.clients || data || []).length;
+            const bookings = data.bookings || [];
+            updateOverviewStats(bookings);
         }
     } catch (e) {}
 }
 
-function statusClass(status) {
-    const map = { confirmed: 'bg-green-100 text-green-700', pending: 'bg-yellow-100 text-yellow-700', cancelled: 'bg-red-100 text-red-700', completed: 'bg-blue-100 text-blue-700' };
-    return map[status] || 'bg-gray-100 text-gray-700';
-}
-
-function showPanel(name) {
-    ['overview','bookings','staff','services','clients'].forEach(p => {
-        document.getElementById('panel-' + p).classList.toggle('hidden', p !== name);
-    });
+function updateOverviewStats(bookings) {
+    const today = new Date().toDateString();
+    const todayBookings = bookings.filter(b => new Date(b.startTime).toDateString() === today);
+    
+    const statTodayEl = document.querySelector('#panel-overview [data-stat="today"]');
+    if (statTodayEl) statTodayEl.textContent = todayBookings.length;
+    
+    fetch('/clients/salon/' + salonId, { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('auth_token') } })
+        .then(r => r.json())
+        .then(data => {
+            const clientsEl = document.querySelector('#panel-overview [data-stat="clients"]');
+            if (clientsEl) clientsEl.textContent = data.totalCount || (data.clients || []).length || 0;
+        });
 }
 
 function signOut() {
@@ -278,36 +569,7 @@ function signOut() {
     window.location.href = '/';
 }
 
-async function loadBookings() {
-    const token = localStorage.getItem('auth_token') || '';
-    const status = document.getElementById('booking-status-filter').value;
-    const url = '/api/bookings?salonId=' + salonId + (status ? '&status=' + status : '');
-    try {
-        const resp = await fetch(url, { headers: { 'Authorization': 'Bearer ' + token } });
-        if (resp.ok) {
-            const data = await resp.json();
-            const bookings = data.bookings || data || [];
-            document.getElementById('bookings-list').innerHTML = bookings.length
-                ? `<table class="w-full text-sm"><thead><tr class="bg-gray-50 border-b border-gray-200">
-                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">Client</th>
-                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">Service</th>
-                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">Date & Time</th>
-                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">Status</th>
-                   </tr></thead><tbody>${bookings.map(b => `
-                    <tr class="border-b border-gray-100 hover:bg-gray-50">
-                        <td class="px-4 py-3 font-medium">${b.clientName || b.customerName || '—'}</td>
-                        <td class="px-4 py-3 text-gray-600">${b.serviceName || '—'}</td>
-                        <td class="px-4 py-3 text-gray-600">${b.startTime ? new Date(b.startTime).toLocaleString() : '—'}</td>
-                        <td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-medium ${statusClass(b.status)}">${b.status || 'pending'}</span></td>
-                    </tr>`).join('')}</tbody></table>`
-                : '<p class="text-center py-8 text-gray-400 text-sm">No bookings found.</p>';
-        }
-    } catch {}
-}
-
 init();
 </script>
 </body>
 </html>
-
-

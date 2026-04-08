@@ -1,0 +1,86 @@
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">🔔 Notifications</h1>
+            <p class="text-gray-600">Manage alerts and notifications</p>
+        </div>
+        <button onclick="markAllRead()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">Mark All Read</button>
+    </div>
+
+    <!-- Unread Count -->
+    <div class="bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl p-6 text-white">
+        <div class="flex items-center justify-between">
+            <div>
+                <h3 class="text-2xl font-bold">3 Unread Notifications</h3>
+                <p class="opacity-90">You have new notifications to review</p>
+            </div>
+            <button onclick="switchTab('notifications')" class="px-6 py-2 bg-white text-purple-600 rounded-lg font-medium hover:bg-purple-50">
+                View All
+            </button>
+        </div>
+    </div>
+
+    <!-- Notification List -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-6 border-b border-gray-100">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-gray-900">Recent Notifications</h3>
+                <select class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <option value="">All Types</option>
+                    <option value="booking">Bookings</option>
+                    <option value="payment">Payments</option>
+                    <option value="system">System</option>
+                </select>
+            </div>
+        </div>
+        <div id="notifications-list" class="divide-y divide-gray-100">
+            <!-- Sample notifications -->
+            <div class="p-4 hover:bg-gray-50 flex items-start gap-4 bg-blue-50">
+                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium text-gray-900">New booking received</p>
+                    <p class="text-sm text-gray-600">Jane Doe booked a Haircut for tomorrow at 2:00 PM</p>
+                    <p class="text-xs text-gray-400 mt-1">2 minutes ago</p>
+                </div>
+            </div>
+            <div class="p-4 hover:bg-gray-50 flex items-start gap-4 bg-green-50">
+                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium text-gray-900">Payment received</p>
+                    <p class="text-sm text-gray-600">You received $85.00 from John Smith</p>
+                    <p class="text-xs text-gray-400 mt-1">15 minutes ago</p>
+                </div>
+            </div>
+            <div class="p-4 hover:bg-gray-50 flex items-start gap-4 bg-yellow-50">
+                <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium text-gray-900">Low stock alert</p>
+                    <p class="text-sm text-gray-600">Product "Shampoo Premium" is running low (3 items left)</p>
+                    <p class="text-xs text-gray-400 mt-1">1 hour ago</p>
+                </div>
+            </div>
+            <div class="p-4 hover:bg-gray-50 flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a5.002 5.002 0 019.58 2.585A2.003 2.003 0 0015 16a5 5 0 01-9 0"/></svg>
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium text-gray-900">New review</p>
+                    <p class="text-sm text-gray-600">Sarah Johnson left a 5-star review</p>
+                    <p class="text-xs text-gray-400 mt-1">2 hours ago</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function markAllRead() {
+    alert('All notifications marked as read!');
+}
+</script>

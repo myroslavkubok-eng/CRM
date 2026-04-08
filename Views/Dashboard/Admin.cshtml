@@ -136,13 +136,13 @@ async function init() {
     if (!token) { window.location.href = '/auth'; return; }
 
     try {
-        const resp = await fetch('/api/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
+        const resp = await fetch('/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
         if (!resp.ok) { window.location.href = '/auth'; return; }
         const user = await resp.json();
         document.getElementById('user-name').textContent = user.fullName || user.email;
         document.getElementById('user-initial').textContent = (user.fullName || user.email || 'A')[0].toUpperCase();
 
-        const sResp = await fetch('/api/salons/user/' + user.id, { headers: { 'Authorization': 'Bearer ' + token } });
+        const sResp = await fetch('/salons/user/' + user.id, { headers: { 'Authorization': 'Bearer ' + token } });
         if (sResp.ok) {
             const sData = await sResp.json();
             const salon = sData.salon || sData;
@@ -156,8 +156,8 @@ async function loadData(token) {
     if (!salonId) return;
     try {
         const [bResp, cResp] = await Promise.all([
-            fetch('/api/bookings?salonId=' + salonId, { headers: { 'Authorization': 'Bearer ' + token } }),
-            fetch('/api/clients?salonId=' + salonId, { headers: { 'Authorization': 'Bearer ' + token } })
+            fetch('/bookings?salonId=' + salonId, { headers: { 'Authorization': 'Bearer ' + token } }),
+            fetch('/clients?salonId=' + salonId, { headers: { 'Authorization': 'Bearer ' + token } })
         ]);
 
         if (bResp.ok) {

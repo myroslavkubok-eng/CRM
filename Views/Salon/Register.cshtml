@@ -225,7 +225,7 @@ document.getElementById('signin-form').addEventListener('submit', async function
     errorEl.classList.add('hidden');
 
     try {
-        const resp = await fetch('/api/auth/login', {
+        const resp = await fetch('/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -282,7 +282,7 @@ document.getElementById('signup-form').addEventListener('submit', async function
     errorEl.classList.add('hidden');
 
     try {
-        const resp = await fetch('/api/auth/register', {
+        const resp = await fetch('/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

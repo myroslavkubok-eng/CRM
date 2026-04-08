@@ -215,7 +215,7 @@ document.getElementById('back-to-salon').href = '/salon/profile/' + salonId;
 
 async function loadSalonData() {
     try {
-        const resp = await fetch('/api/salons/' + salonId);
+        const resp = await fetch('/salons/' + salonId);
         if (!resp.ok) throw new Error();
         const data = await resp.json();
         const salon = data.salon || data;
@@ -250,7 +250,7 @@ async function loadSalonData() {
 
 async function loadMasters(sid) {
     try {
-        const resp = await fetch('/api/masters/salon/' + sid);
+        const resp = await fetch('/masters/salon/' + sid);
         if (!resp.ok) return;
         const masters = await resp.json();
         const container = document.getElementById('masters-container');
@@ -358,7 +358,7 @@ async function confirmBooking() {
     const bookingDate = new Date(booking.date + 'T' + booking.time);
 
     try {
-        const resp = await fetch('/api/bookings', {
+        const resp = await fetch('/bookings', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

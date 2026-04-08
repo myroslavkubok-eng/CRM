@@ -24,6 +24,20 @@ public class AuthResponse
     public UserDto? User { get; set; }
 }
 
+public class GoogleAuthRequest
+{
+    public string IdToken { get; set; } = string.Empty;
+    public string Role { get; set; } = "Client";
+}
+
+public class AppleAuthRequest
+{
+    public string IdToken { get; set; } = string.Empty;
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+    public string Role { get; set; } = "Client";
+}
+
 public class UserDto
 {
     public Guid Id { get; set; }

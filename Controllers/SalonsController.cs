@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CRMKatia.Controllers;
 
 [ApiController]
-[Route("api/salons")]
+[Route("salons")]
 [Authorize]
 public class SalonsController : ControllerBase
 {

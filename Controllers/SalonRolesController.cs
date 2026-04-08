@@ -12,7 +12,7 @@ namespace CRMKatia.Controllers;
 /// Replaces the Supabase Edge Function /salon-role/{userId} endpoint.
 /// </summary>
 [ApiController]
-[Route("api/salon-roles")]
+[Route("salon-roles")]
 [Authorize]
 public class SalonRolesController : ControllerBase
 {

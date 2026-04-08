@@ -25,6 +25,12 @@ public class RepositoryBase<T> : IRepository<T> where T : class
         return await DbSet.ToListAsync();
     }
 
+    public virtual async Task<List<T>> FindAsync(Func<T, bool> predicate)
+    {
+        var all = await GetAllAsync();
+        return all.Where(predicate).ToList();
+    }
+
     public virtual async Task AddAsync(T entity)
     {
         await DbSet.AddAsync(entity);
